@@ -56,9 +56,9 @@ curl_setopt_array($curl, array(
 }',
    CURLOPT_HTTPHEADER => array(
       'clientId: 74c01d46896d48608367e308edf9e7f1',
-      'nonce: {$nonce}',
-      'timestamp: {$timestamp}',
-      'sign: {$sign}',
+      'nonce: '.$nonce,
+      'timestamp: '.$timestamp,
+      'sign: '.$sign,
       'Accept-Language: ko-KR',
       'Content-Type: application/json'
    ),
