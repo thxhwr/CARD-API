@@ -35,9 +35,9 @@ $clientId  = '74c01d46896d48608367e308edf9e7f1';
 $timestamp = getTimestamp();
 $nonce     = generateNonce();
 
-// $data = sprintf('clientId=%s&nonce=%s&timestamp=%s',$clientId,$nonce,$timestamp);
+$data = sprintf('clientId=%s&nonce=%s&timestamp=%s',$clientId,$nonce,$timestamp);
 
-// $sign = generateSign($data, SECRET_KEY);
+$sign = generateSign($data, SECRET_KEY);
 
 // $curl = curl_init();
 
