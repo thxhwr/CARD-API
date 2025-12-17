@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/config/lib.php';
+require_once __DIR__ . '/lib.php';
 
 
 $stmt = $pdo->query("
