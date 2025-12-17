@@ -158,7 +158,34 @@ if ($nowMs >= $token['expires_at']) {
     $response = curl_exec($curl);
 
     curl_close($curl);
-    echo $response;
+
+    $accessTokenAdd = json_decode($response, true);
+
+    $sql = "
+    INSERT INTO API_ACCESS_TOKEN
+    (
+        AT_STATUS,
+        AT_EXPIRES_IN,
+        AT_ACCESS_TOKEN,
+        AT_TIME_STAMP
+    )
+    VALUES
+    (
+        :status,
+        :expires_in,
+        :access_token,
+        :time_stamp
+    )
+    ";
+
+    $stmt = $pdo->prepare($sql);
+
+    $stmt->execute([
+        ':status'        => $accessTokenAdd['status'],
+        ':expires_in'    => (int)$accessTokenAdd['data']['expiresIn'],
+        ':access_token'  => $accessTokenAdd['data']['accessToken'],
+        ':time_stamp'    => (int)$accessTokenAdd['data']['timestamp'],
+    ]);
 }
 
 ?>
