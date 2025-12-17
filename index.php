@@ -72,7 +72,7 @@ $sign = generateSign($data, SECRET_KEY);
 echo "clientId: 74c01d46896d48608367e308edf9e7f1\n";
 echo "nonce: ".$nonce."\n";
 echo "timestamp: ".$timestamp."\n";
-echo "data: {var_dump($data)}\n";
+echo "data: {$data}\n";
 echo "sign: ".$sign;
 
 ?>
