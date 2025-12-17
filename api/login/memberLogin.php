@@ -1,6 +1,4 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
@@ -52,7 +50,6 @@ try {
     $response = curl_exec($curl);
     $memberInfo = json_decode($response, true);
     curl_close($curl);
-    echo $response;
 
     if (($memberInfo['status'] ?? '') !== 'SUCCESS') {
         jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
