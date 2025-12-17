@@ -64,9 +64,9 @@ try {
 
     if(md5($password) == $memberInfo['data'][0]['password']){
         jsonResponse(RES_SUCCESS, [
-            'accountNo'    => $memberInfo[0]['accountNo'],
-            'userId' => $memberInfo[0]['userId'],
-            'status' => $memberInfo[0]['status']
+            'accountNo'    => $memberInfo['data'][0]['accountNo'],
+            'userId' => $memberInfo['data'][0]['userId'],
+            'status' => $memberInfo['data'][0]['status']
         ]);
     }else{
         if (!hash_equals($memberInfo['data'][0]['password'], md5($password))) {
