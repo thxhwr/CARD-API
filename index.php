@@ -119,9 +119,7 @@ print_r($token);
 $nowMs = (int)(microtime(true) * 1000);
 
 if ($nowMs >= $token['expires_at']) {
-    echo "만료";
-}else{
-
+    
     $clientId  = '74c01d46896d48608367e308edf9e7f1';
     $timestamp = getTimestamp();
     $nonce     = generateNonce();
@@ -186,6 +184,8 @@ if ($nowMs >= $token['expires_at']) {
         ':access_token'  => $accessTokenAdd['data']['accessToken'],
         ':time_stamp'    => (int)$accessTokenAdd['data']['timestamp'],
     ]);
+}else{
+    echo "정상";
 }
 
 ?>
