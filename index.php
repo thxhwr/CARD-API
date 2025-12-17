@@ -105,7 +105,7 @@ function generateSign(string $data, string $clientSecret): string
 require_once __DIR__ . '/config/lib.php';
 
 // 바로 $pdo 사용
-$stmt = $pdo->query('SELECT FROM_UNIXTIME(AT_EXPIRES_AT / 1000) AS expires_at, AT_ACCESS_TOKEN FROM API_ACCESS_TOKEN WHERE AT_STATUS = "SUCCESS" ORDER BY AT_TIME_STAMP DESC LIMIT 1;');
+$stmt = $pdo->query('SELECT FROM_UNIXTIME(AT_EXPIRES_IN / 1000) AS expires_at, AT_ACCESS_TOKEN FROM API_ACCESS_TOKEN WHERE AT_STATUS = "SUCCESS" ORDER BY AT_TIME_STAMP DESC LIMIT 1;');
 $token = $stmt->fetch(PDO::FETCH_ASSOC);
 
 print_r($token);
