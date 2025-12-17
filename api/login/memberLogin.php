@@ -3,10 +3,6 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
 try {
-
-    $_POST['memberId'] = 'kni19293@naver.com';
-    $_POST['memberPw'] = '123454';
-
     $memberId = $_POST['memberId'] ?? '';
     $password = $_POST['memberPw'] ?? '';
 
