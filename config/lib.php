@@ -81,4 +81,59 @@ $nonce     = generateNonce();
 $data = sprintf('clientId=%s&nonce=%s&timestamp=%s',$clientId,$nonce,$timestamp);
 $sign = generateSign($data, SECRET_KEY);
 
+
+/* =========================
+ * Response Code 정의
+ * ========================= */
+
+const RES_SUCCESS              = 0;
+const RES_INVALID_PARAM        = 1001;
+const RES_INVALID_EMAIL        = 1002;
+const RES_INVALID_PASSWORD     = 1003;
+const RES_API_CALL_FAIL        = 2001;
+const RES_API_RESPONSE_ERROR   = 2002;
+const RES_USER_NOT_FOUND       = 3001;
+const RES_USER_DISABLED        = 3002;
+const RES_PASSWORD_MISMATCH    = 3003;
+const RES_SYSTEM_ERROR         = 9000;
+
+/* =========================
+ * Response Message 매핑
+ * ========================= */
+
+function getResMessage(int $code): string
+{
+    $messages = [
+        RES_SUCCESS              => '성공',
+        RES_INVALID_PARAM        => '필수 파라미터가 누락되었습니다.',
+        RES_INVALID_EMAIL        => '아이디 형식이 올바르지 않습니다.',
+        RES_INVALID_PASSWORD     => '비밀번호 형식이 올바르지 않습니다.',
+        RES_API_CALL_FAIL        => '외부 API 호출 실패',
+        RES_API_RESPONSE_ERROR   => 'API 응답 오류',
+        RES_USER_NOT_FOUND       => '존재하지 않는 회원입니다.',
+        RES_USER_DISABLED        => '비활성화된 계정입니다.',
+        RES_PASSWORD_MISMATCH    => '아이디 또는 비밀번호가 일치하지 않습니다.',
+        RES_SYSTEM_ERROR         => '시스템 오류',
+    ];
+
+    return $messages[$code] ?? '알 수 없는 오류';
+}
+
+/* =========================
+ * 공통 JSON 응답 함수
+ * ========================= */
+
+function jsonResponse(int $code, array $data = [], int $httpStatus = 200): never
+{
+    http_response_code($httpStatus);
+
+    echo json_encode([
+        'resCode' => $code,
+        'message' => getResMessage($code),
+        'data'    => $data
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
 ?>
