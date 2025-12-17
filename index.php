@@ -85,7 +85,7 @@ curl_setopt_array($curl, array(
    CURLOPT_POSTFIELDS =>'{
     "accountNo": "kni1993@naver.com",
     "pageIndex": 1,
-    "pageSize": 10
+    "pageSize": 1
 }',
    CURLOPT_HTTPHEADER => array(
       'access_token: '.$acToken,
