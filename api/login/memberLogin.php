@@ -38,7 +38,7 @@ try {
     CURLOPT_POSTFIELDS     => json_encode($payload),
     CURLOPT_HTTPHEADER => array(
         'access_token: '.$token['AT_ACCESS_TOKEN'],
-        'clientId: 74c01d46896d48608367e308edf9e7f1',
+        'clientId: 74c01d46896d48608367e308edf9e7f12',
         'nonce: '.$nonce,
         'timestamp: '.$timestamp,
         'sign: '.$sign,
