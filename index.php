@@ -39,7 +39,7 @@ function generateSign(string $data, string $clientSecret): string
    사용 예시
    ========================= */
 
-$clientId  = 'clientId123456';
+$clientId  = '74c01d46896d48608367e308edf9e7f1';
 $timestamp = getTimestamp();
 $nonce     = generateNonce();
 
