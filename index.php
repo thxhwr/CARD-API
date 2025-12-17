@@ -69,7 +69,6 @@ $sign = generateSign($data, SECRET_KEY);
 // curl_close($curl);
 // echo $response;
 
-echo "안녕하세요 개발자님들 혹시 API연동하는데에 서명 이상 이라고 오류메세지가 나와서 확인 한번 해주실 수 있을까요\n\n";
 echo "clientId: 74c01d46896d48608367e308edf9e7f1\n";
 echo "nonce: ".$nonce."\n";
 echo "timestamp: ".$timestamp."\n";
