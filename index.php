@@ -43,48 +43,40 @@ $clientId  = '74c01d46896d48608367e308edf9e7f1';
 $timestamp = getTimestamp();
 $nonce     = generateNonce();
 
-$data = sprintf(
-    'clientId=%s&nonce=%s&timestamp=%s',
-    $clientId,
-    $nonce,
-    $timestamp
-);
+$data = sprintf('clientId=%s&nonce=%s&timestamp=%s',$clientId,$nonce,$timestamp);
 
 $sign = generateSign($data, SECRET_KEY);
 
-echo "时间戳：{$timestamp}\n";
-echo "32位随机串：{$nonce}\n";
-echo "加密前字符串：{$data}\n";
-echo "最终签名：{$sign}\n";
+print_r($sign);
 
-$curl = curl_init();
+// $curl = curl_init();
 
-curl_setopt_array($curl, array(
-   CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/oauth/access-token',
-   CURLOPT_RETURNTRANSFER => true,
-   CURLOPT_ENCODING => '',
-   CURLOPT_MAXREDIRS => 10,
-   CURLOPT_TIMEOUT => 0,
-   CURLOPT_FOLLOWLOCATION => true,
-   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-   CURLOPT_CUSTOMREQUEST => 'POST',
-   CURLOPT_POSTFIELDS =>'{
-    "clientId": "74c01d46896d48608367e308edf9e7f1",
-    "clientSecret": "MTc2NDMyNTk4MTU4MkVYSU1JVVNjYjc5Njc2YWJmOTE0MGQ4YWU4YzhiOTE2MzJlMmNkMA=="
-}',
-   CURLOPT_HTTPHEADER => array(
-      'clientId: 74c01d46896d48608367e308edf9e7f1',
-      'nonce: {{$string.uuid}}',
-      'timestamp: {{$date.anytime|format(\'yyyyMMddHHmmss\')}}',
-      'sign: {{$sign}}',
-      'Accept-Language: en-US',
-      'Content-Type: application/json'
-   ),
-));
+// curl_setopt_array($curl, array(
+//    CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/oauth/access-token',
+//    CURLOPT_RETURNTRANSFER => true,
+//    CURLOPT_ENCODING => '',
+//    CURLOPT_MAXREDIRS => 10,
+//    CURLOPT_TIMEOUT => 0,
+//    CURLOPT_FOLLOWLOCATION => true,
+//    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//    CURLOPT_CUSTOMREQUEST => 'POST',
+//    CURLOPT_POSTFIELDS =>'{
+//     "clientId": "74c01d46896d48608367e308edf9e7f1",
+//     "clientSecret": "MTc2NDMyNTk4MTU4MkVYSU1JVVNjYjc5Njc2YWJmOTE0MGQ4YWU4YzhiOTE2MzJlMmNkMA=="
+// }',
+//    CURLOPT_HTTPHEADER => array(
+//       'clientId: 74c01d46896d48608367e308edf9e7f1',
+//       'nonce: {{$string.uuid}}',
+//       'timestamp: {{$date.anytime|format(\'yyyyMMddHHmmss\')}}',
+//       'sign: {{$sign}}',
+//       'Accept-Language: en-US',
+//       'Content-Type: application/json'
+//    ),
+// ));
 
-$response = curl_exec($curl);
+// $response = curl_exec($curl);
 
-curl_close($curl);
-echo $response;
+// curl_close($curl);
+// echo $response;
 
 ?>
