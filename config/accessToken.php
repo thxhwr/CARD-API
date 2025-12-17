@@ -14,9 +14,10 @@ SELECT CONVERT_TZ(
 FROM API_ACCESS_TOKEN WHERE AT_STATUS = 'SUCCESS' ORDER BY AT_TIME_STAMP DESC LIMIT 1;");
 $token = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$nowMs = (int)(microtime(true) * 1000);
-echo $nowMs;
-if ($nowMs >= $token['expires_at']) {
+$now = new DateTime('now');
+$expireTime = new DateTime($token['expires_at']);
+
+if ($now >= $expireTime) {
     
     $clientId  = '74c01d46896d48608367e308edf9e7f1';
     $timestamp = getTimestamp();
