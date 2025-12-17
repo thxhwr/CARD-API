@@ -184,8 +184,6 @@ if ($nowMs >= $token['expires_at']) {
         ':access_token'  => $accessTokenAdd['data']['accessToken'],
         ':time_stamp'    => (int)$accessTokenAdd['data']['timestamp'],
     ]);
-}else{
-    echo "정상";
 }
 
 ?>
