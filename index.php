@@ -102,35 +102,10 @@ function generateSign(string $data, string $clientSecret): string
 
 // curl_close($curl);
 // echo $response;
-$dsn = 'mysql:host=72.60.237.149;port=37722;dbname=THXDEAL_DB;charset=utf8mb4';
+require_once __DIR__ . '/../../config/lib.php';
 
-$options = [
-    // 에러를 예외로 처리
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-
-    // 실제 prepared statement 사용
-    PDO::ATTR_EMULATE_PREPARES => false,
-
-    // SSL 설정
-    PDO::MYSQL_ATTR_SSL_KEY    => '/home/thxdeal/mysql_certs/client-key.pem',
-    PDO::MYSQL_ATTR_SSL_CERT   => '/home/thxdeal/mysql_certs/client-cert.pem',
-    PDO::MYSQL_ATTR_SSL_CA     => '/home/thxdeal/mysql_certs/ca.pem',
-
-    // 서버 인증서 검증
-    PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => true,
-];
-
-try {
-    $pdo = new PDO(
-        $dsn,
-        'thxdeal',
-        'dealThx11223@#',
-        $options
-    );
-
-    echo 'SSL 연결 성공';
-} catch (PDOException $e) {
-    die('Connection failed: ' . $e->getMessage());
-}
+// 바로 $pdo 사용
+$stmt = $pdo->query('SELECT NOW()');
+echo $stmt->fetchColumn();
 
 ?>
