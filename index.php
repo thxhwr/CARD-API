@@ -31,43 +31,43 @@ function generateSign(string $data, string $clientSecret): string
 }
 
 
-$clientId  = '74c01d46896d48608367e308edf9e7f1';
-$timestamp = getTimestamp();
-$nonce     = generateNonce();
+// $clientId  = '74c01d46896d48608367e308edf9e7f1';
+// $timestamp = getTimestamp();
+// $nonce     = generateNonce();
 
-$data = sprintf('clientId=%s&nonce=%s&timestamp=%s',$clientId,$nonce,$timestamp);
+// $data = sprintf('clientId=%s&nonce=%s&timestamp=%s',$clientId,$nonce,$timestamp);
 
-$sign = generateSign($data, SECRET_KEY);
+// $sign = generateSign($data, SECRET_KEY);
 
-$curl = curl_init();
+// $curl = curl_init();
 
-curl_setopt_array($curl, array(
-   CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/oauth/access-token',
-   CURLOPT_RETURNTRANSFER => true,
-   CURLOPT_ENCODING => '',
-   CURLOPT_MAXREDIRS => 10,
-   CURLOPT_TIMEOUT => 0,
-   CURLOPT_FOLLOWLOCATION => true,
-   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-   CURLOPT_CUSTOMREQUEST => 'POST',
-   CURLOPT_POSTFIELDS =>'{
-    "clientId": "74c01d46896d48608367e308edf9e7f1",
-    "clientSecret": "MTc2NDMyNTk4MTU4MkVYSU1JVVNjYjc5Njc2YWJmOTE0MGQ4YWU4YzhiOTE2MzJlMmNkMA=="
-}',
-   CURLOPT_HTTPHEADER => array(
-      'clientId: 74c01d46896d48608367e308edf9e7f1',
-      'nonce: '.$nonce,
-      'timestamp: '.$timestamp,
-      'sign: '.$sign,
-      'Accept-Language: ko-KR',
-      'Content-Type: application/json'
-   ),
-));
+// curl_setopt_array($curl, array(
+//    CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/oauth/access-token',
+//    CURLOPT_RETURNTRANSFER => true,
+//    CURLOPT_ENCODING => '',
+//    CURLOPT_MAXREDIRS => 10,
+//    CURLOPT_TIMEOUT => 0,
+//    CURLOPT_FOLLOWLOCATION => true,
+//    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//    CURLOPT_CUSTOMREQUEST => 'POST',
+//    CURLOPT_POSTFIELDS =>'{
+//     "clientId": "74c01d46896d48608367e308edf9e7f1",
+//     "clientSecret": "MTc2NDMyNTk4MTU4MkVYSU1JVVNjYjc5Njc2YWJmOTE0MGQ4YWU4YzhiOTE2MzJlMmNkMA=="
+// }',
+//    CURLOPT_HTTPHEADER => array(
+//       'clientId: 74c01d46896d48608367e308edf9e7f1',
+//       'nonce: '.$nonce,
+//       'timestamp: '.$timestamp,
+//       'sign: '.$sign,
+//       'Accept-Language: ko-KR',
+//       'Content-Type: application/json'
+//    ),
+// ));
 
-$response = curl_exec($curl);
+// $response = curl_exec($curl);
 
-curl_close($curl);
-echo $response;
+// curl_close($curl);
+// echo $response;
 
 // $acToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyU2Vzc2lvbiI6IntcImFjY291bnROb1wiOlwidGh4X2FwaV90ZXN0QGdtYWlsLmNvbVwiLFwiYWdlbnRGbGFnXCI6MSxcImNyZWF0ZWREYXRlXCI6MTc2NDMyMTQ4MDg1MixcImxvZ2luRGF0ZVwiOjE3NjU5NjY0OTYwODYsXCJ0aW1lU3RhbXBcIjoxNzY1OTY2NDk2MDg2LFwidHlwZVwiOjIsXCJ1c2VySWRcIjoyMjIyNTM2fSJ9.NktKuIdvyI2ihhY_A6__lmsaugZTUpdtgS6u04NNStg";
 
@@ -102,5 +102,38 @@ echo $response;
 
 // curl_close($curl);
 // echo $response;
+
+ini_set ('error_reporting', E_ALL);
+ini_set ('display_errors', '1');
+error_reporting (E_ALL|E_STRICT);
+
+$mysqli = mysqli_init();
+
+// SSL 설정
+$mysqli->ssl_set(
+    '/home/thxdeal/mysql_certs/client-key.pem',
+    '/home/thxdeal/mysql_certs/client-cert.pem',
+    '/home/thxdeal/mysql_certs/ca.pem',
+    NULL,
+    NULL
+);
+
+// 서버 인증서 검증 옵션 설정
+$mysqli->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, true);
+
+// 실제 연결
+if (!$mysqli->real_connect(
+    '72.60.237.149', 
+    'thxdeal', 
+    'dealThx11223@#', 
+    'THXDEAL_DB', 
+    37722, 
+    NULL, 
+    MYSQLI_CLIENT_SSL
+)) {
+    die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+}
+
+echo "SSL 연결 성공";
 
 ?>
