@@ -39,7 +39,7 @@ $memberInfo = json_decode($response, true);
 curl_close($curl);
 echo $response;
 
-if(md5($password) == $memberInfo['data']['password']){
+if(md5($password) == $memberInfo['data'][0]['password']){
     echo "일치";
 }else{
     echo "불일치";
