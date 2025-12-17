@@ -93,6 +93,4 @@ if ($now >= $expireTime) {
     FROM API_ACCESS_TOKEN WHERE AT_STATUS = 'SUCCESS' ORDER BY AT_TIME_STAMP DESC LIMIT 1;");
     $token = $stmt->fetch(PDO::FETCH_ASSOC);
 }
-
-print_r($token);
 ?>
