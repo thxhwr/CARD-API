@@ -4,6 +4,8 @@ ini_set('display_startup_errors', 1);
 require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
+$memberId = "kni1993@naver.com";
+$password = "123456";
 
 $curl = curl_init();
 
@@ -33,8 +35,13 @@ curl_setopt_array($curl, array(
 ));
 
 $response = curl_exec($curl);
-
+$memberInfo = json_decode($response, true);
 curl_close($curl);
 echo $response;
 
+if(md5($password) == $memberInfo['data']['password']){
+    echo "일치";
+}else{
+    echo "불일치";
+}
 ?>
