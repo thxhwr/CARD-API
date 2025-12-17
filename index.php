@@ -113,7 +113,9 @@ print_r($token);
 $nowMs = (int)(microtime(true) * 1000);
 
 if ($nowMs >= $token['expires_at']) {
-    // 토큰 만료
+    echo "만료";
+}else{
+    echo "정상";
 }
 
 ?>
