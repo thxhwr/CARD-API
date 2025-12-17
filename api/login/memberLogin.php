@@ -5,7 +5,7 @@ require_once BASE_PATH . '/config/accessToken.php';
 try {
 
     $_POST['memberId'] = 'kni1993@naver.com';
-    $_POST['memberPw'] = '123456';
+    $_POST['memberPw'] = '123454';
 
     $memberId = $_POST['memberId'] ?? '';
     $password = $_POST['memberPw'] ?? '';
