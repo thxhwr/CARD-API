@@ -102,38 +102,35 @@ function generateSign(string $data, string $clientSecret): string
 
 // curl_close($curl);
 // echo $response;
+$dsn = 'mysql:host=72.60.237.149;port=37722;dbname=THXDEAL_DB;charset=utf8mb4';
 
-ini_set ('error_reporting', E_ALL);
-ini_set ('display_errors', '1');
-error_reporting (E_ALL|E_STRICT);
+$options = [
+    // 에러를 예외로 처리
+    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
 
-$mysqli = mysqli_init();
+    // 실제 prepared statement 사용
+    PDO::ATTR_EMULATE_PREPARES => false,
 
-// SSL 설정
-$mysqli->ssl_set(
-    '/home/thxdeal/mysql_certs/client-key.pem',
-    '/home/thxdeal/mysql_certs/client-cert.pem',
-    '/home/thxdeal/mysql_certs/ca.pem',
-    NULL,
-    NULL
-);
+    // SSL 설정
+    PDO::MYSQL_ATTR_SSL_KEY    => '/home/thxdeal/mysql_certs/client-key.pem',
+    PDO::MYSQL_ATTR_SSL_CERT   => '/home/thxdeal/mysql_certs/client-cert.pem',
+    PDO::MYSQL_ATTR_SSL_CA     => '/home/thxdeal/mysql_certs/ca.pem',
 
-// 서버 인증서 검증 옵션 설정
-$mysqli->options(MYSQLI_OPT_SSL_VERIFY_SERVER_CERT, true);
+    // 서버 인증서 검증
+    PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => true,
+];
 
-// 실제 연결
-if (!$mysqli->real_connect(
-    '72.60.237.149', 
-    'thxdeal', 
-    'dealThx11223@#', 
-    'THXDEAL_DB', 
-    37722, 
-    NULL, 
-    MYSQLI_CLIENT_SSL
-)) {
-    die('Connect Error (' . mysqli_connect_errno() . ') ' . mysqli_connect_error());
+try {
+    $pdo = new PDO(
+        $dsn,
+        'thxdeal',
+        'dealThx11223@#',
+        $options
+    );
+
+    echo 'SSL 연결 성공';
+} catch (PDOException $e) {
+    die('Connection failed: ' . $e->getMessage());
 }
-
-echo "SSL 연결 성공";
 
 ?>
