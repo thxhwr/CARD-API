@@ -1,5 +1,8 @@
 <?php
-require_once __DIR__ . '/lib.php';
+if (!defined('BASE_PATH')) {
+    require_once __DIR__ . '/bootstrap.php'; // 예비용
+}
+require_once BASE_PATH . '/config/lib.php';
 
 
 $stmt = $pdo->query("

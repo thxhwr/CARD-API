@@ -2,6 +2,8 @@
 declare(strict_types=1);
 header('Content-Type: text/plain; charset=UTF-8');
 
+define('BASE_PATH', realpath(__DIR__ . '/../'));
+
 date_default_timezone_set('Asia/Seoul');
 
 if (php_sapi_name() !== 'cli' && realpath(__FILE__) === realpath($_SERVER['SCRIPT_FILENAME'])) {
