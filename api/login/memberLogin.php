@@ -6,9 +6,9 @@ require_once BASE_PATH . '/config/accessToken.php';
 
 try {
 
-    $_POST['memberId'] = 'kni1993';
+    $_POST['memberId'] = 'kni1993@naver.com';
     $_POST['memberPw'] = '123456';
-    
+
     $memberId = $_POST['memberId'] ?? '';
     $password = $_POST['memberPw'] ?? '';
 
@@ -19,6 +19,12 @@ try {
     if (!filter_var($memberId, FILTER_VALIDATE_EMAIL)) {
         jsonResponse(RES_INVALID_EMAIL, [], 400);
     }
+
+    $payload = [
+        'accountNo' => $memberId,
+        'pageIndex' => 1,
+        'pageSize'  => 1,
+    ];
 
     $curl = curl_init();
 
@@ -31,11 +37,7 @@ try {
     CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => 'POST',
-    CURLOPT_POSTFIELDS =>'{
-        "accountNo": "kni1993@naver.com",
-        "pageIndex": 1,
-        "pageSize": 1
-    }',
+    CURLOPT_POSTFIELDS     => json_encode($payload),
     CURLOPT_HTTPHEADER => array(
         'access_token: '.$token['AT_ACCESS_TOKEN'],
         'clientId: 74c01d46896d48608367e308edf9e7f1',
