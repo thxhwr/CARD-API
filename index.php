@@ -6,7 +6,7 @@ error_reporting(E_ALL);
 
 
 // 共享密钥（需安全保管，勿泄露）
-const SECRET_KEY = 'hwrft11223@#';
+const SECRET_KEY = 'MTc2NDMyNTk4MTU4MkVYSU1JVVNjYjc5Njc2YWJmOTE0MGQ4YWU4YzhiOTE2MzJlMmNkMA==';
 
 /** 生成32位随机字符串（字母+数字） */
 function generateNonce(): string
