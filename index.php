@@ -104,7 +104,7 @@ function generateSign(string $data, string $clientSecret): string
 // echo $response;
 require_once __DIR__ . '/config/lib.php';
 
-// 바로 $pdo 사용
+// 바로 $pdo 사용 
 $stmt = $pdo->query("
 SELECT CONVERT_TZ(
     FROM_UNIXTIME(AT_EXPIRES_IN / 1000),'+00:00','+09:00') AS expires_at, 
