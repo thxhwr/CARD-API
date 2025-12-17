@@ -72,9 +72,9 @@ $sign = generateSign($data, SECRET_KEY);
 $acToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyU2Vzc2lvbiI6IntcImFjY291bnROb1wiOlwidGh4X2FwaV90ZXN0QGdtYWlsLmNvbVwiLFwiYWdlbnRGbGFnXCI6MSxcImNyZWF0ZWREYXRlXCI6MTc2NDMyMTQ4MDg1MixcImxvZ2luRGF0ZVwiOjE3NjU5NDcwMDI3ODcsXCJ0aW1lU3RhbXBcIjoxNzY1OTQ3MDAyNzg3LFwidHlwZVwiOjIsXCJ1c2VySWRcIjoyMjIyNTM2fSJ9.ZX7GvyaDVkX3GKHTIceyulSHRZWLHb2eVbKBDfg7s3A";
 
 $curl = curl_init();
-
+//    CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/station/user/query',
 curl_setopt_array($curl, array(
-   CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/station/user/query',
+   CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/account/info',
    CURLOPT_RETURNTRANSFER => true,
    CURLOPT_ENCODING => '',
    CURLOPT_MAXREDIRS => 10,
@@ -82,11 +82,6 @@ curl_setopt_array($curl, array(
    CURLOPT_FOLLOWLOCATION => true,
    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
    CURLOPT_CUSTOMREQUEST => 'POST',
-   CURLOPT_POSTFIELDS =>'{
-    "accountNo": "yjm724@naver.com",
-    "pageIndex": 1,
-    "pageSize": 10
-}',
    CURLOPT_HTTPHEADER => array(
       'access_token: '.$acToken,
       'clientId: 74c01d46896d48608367e308edf9e7f1',
