@@ -1,7 +1,7 @@
 <?php
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
-// require_once __DIR__ . '/../../config/bootstrap.php';
+require_once __DIR__ . '/../../config/bootstrap.php';
 // require_once BASE_PATH . '/config/accessToken.php';
 
 // $acToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyU2Vzc2lvbiI6IntcImFjY291bnROb1wiOlwidGh4X2FwaV90ZXN0QGdtYWlsLmNvbVwiLFwiYWdlbnRGbGFnXCI6MSxcImNyZWF0ZWREYXRlXCI6MTc2NDMyMTQ4MDg1MixcImxvZ2luRGF0ZVwiOjE3NjU5NjY0OTYwODYsXCJ0aW1lU3RhbXBcIjoxNzY1OTY2NDk2MDg2LFwidHlwZVwiOjIsXCJ1c2VySWRcIjoyMjIyNTM2fSJ9.NktKuIdvyI2ihhY_A6__lmsaugZTUpdtgS6u04NNStg";
