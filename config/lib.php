@@ -136,4 +136,41 @@ function jsonResponse(int $code, array $data = [], int $httpStatus = 200): never
     exit;
 }
 
+function insertLoginLog(array $params): void
+{
+    global $pdo;
+
+    try {
+        $sql = "
+            INSERT INTO MEMBER_LOGIN_LOG (
+                USER_ID,
+                ACCOUNT_NO,
+                LOGIN_RESULT,
+                FAIL_CODE,
+                IP_ADDRESS,
+                USER_AGENT
+            ) VALUES (
+                :user_id,
+                :account_no,
+                :login_result,
+                :fail_code,
+                :ip_address,
+                :user_agent
+            )
+        ";
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':user_id'      => $params['user_id']      ?? null,
+            ':account_no'   => $params['account_no'],
+            ':login_result' => $params['login_result'],
+            ':fail_code'    => $params['fail_code']    ?? null,
+            ':ip_address'   => $_SERVER['REMOTE_ADDR'] ?? '',
+            ':user_agent'   => $_SERVER['HTTP_USER_AGENT'] ?? '',
+        ]);
+    } catch (Throwable $e) {
+        error_log('[LOGIN_LOG_ERROR] ' . $e->getMessage());
+    }
+}
+
 ?>

@@ -7,7 +7,7 @@ try {
     $password = $_POST['memberPw'] ?? '';
 
     if (empty($memberId) || empty($password)) {
-        jsonResponse(RES_INVALID_PARAM, [], 400);
+        jsonResponse(RES_API_RESPONSE_ERROR, [], 400);
     }
 
     if (!filter_var($memberId, FILTER_VALIDATE_EMAIL)) {
@@ -48,14 +48,32 @@ try {
     curl_close($curl);
 
     if (($memberInfo['status'] ?? '') !== 'SUCCESS') {
+        insertLoginLog([
+            'account_no'   => $memberId,
+            'login_result' => 1,
+            'fail_code'    => RES_API_RESPONSE_ERROR,
+        ]);
+
         jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
     }
     
     if (empty($memberInfo['data'][0])) {
+        insertLoginLog([
+            'account_no'   => $memberId,
+            'login_result' => 1,
+            'fail_code'    => RES_USER_NOT_FOUND,
+        ]);
+
         jsonResponse(RES_USER_NOT_FOUND, [], 404);
     }
 
     if(md5($password) == $memberInfo['data'][0]['password']){
+        insertLoginLog([
+            'user_id'      => $memberInfo['data'][0]['userId'],
+            'account_no'   => $memberInfo['data'][0]['accountNo'],
+            'login_result' => 0,
+        ]);
+
         jsonResponse(RES_SUCCESS, [
             'accountNo'    => $memberInfo['data'][0]['accountNo'],
             'userId' => $memberInfo['data'][0]['userId'],
@@ -63,6 +81,13 @@ try {
         ]);
     }else{
         if (!hash_equals($memberInfo['data'][0]['password'], md5($password))) {
+            insertLoginLog([
+                'user_id'      => $memberInfo['data'][0]['userId'],
+                'account_no'   => $memberId,
+                'login_result' => 1,
+                'fail_code'    => RES_PASSWORD_MISMATCH,
+            ]);
+
             jsonResponse(RES_PASSWORD_MISMATCH, [], 401);
         }
     }
