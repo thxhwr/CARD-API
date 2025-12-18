@@ -173,4 +173,52 @@ function insertLoginLog(array $params): void
     }
 }
 
+
+
+//
+
+function calculateDept(int $totalCount): int
+{
+    $dept = 1;
+    while ((2 ** $dept - 1) < $totalCount) {
+        $dept++;
+    }
+    return $dept;
+}
+
+function assignDeptAndParent(PDO $pdo): array
+{
+    // 전체 회원 수
+    $total = (int)$pdo->query("SELECT COUNT(*) FROM MEMBER")->fetchColumn();
+    $newIndex = $total + 1;
+
+    // dept 계산
+    $dept = calculateDept($newIndex);
+
+    // 이전 dept 누적 수
+    $prevTotal = (2 ** ($dept - 1)) - 1;
+    $deptNo = $newIndex - $prevTotal;
+
+    $parentUserId = null;
+
+    if ($dept > 1) {
+        $parentIndex = intdiv($deptNo - 1, 2) + 1;
+
+        $stmt = $pdo->prepare("
+            SELECT USER_ID
+            FROM MEMBER
+            WHERE DEPT = ?
+            ORDER BY DEPT_NO
+            LIMIT 1 OFFSET ?
+        ");
+        $stmt->execute([$dept - 1, $parentIndex - 1]);
+        $parentUserId = $stmt->fetchColumn();
+    }
+
+    return [
+        'dept' => $dept,
+        'dept_no' => $deptNo,
+        'parent_user_id' => $parentUserId
+    ];
+}
 ?>
