@@ -47,7 +47,6 @@ try {
     $memberInfo = json_decode($response, true);
     curl_close($curl);
 
-    print_r($memberInfo);
     if (($memberInfo['status'] ?? '') !== 'SUCCESS') {
         jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
     }
