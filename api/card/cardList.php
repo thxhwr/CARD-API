@@ -15,9 +15,9 @@ curl_setopt_array($curl, array(
    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
    CURLOPT_CUSTOMREQUEST => 'POST',
    CURLOPT_POSTFIELDS =>'{
-    "cardholderId": 2222540,
+    "cardholderId": 2222539,
     "status": 0,
-    "email": "kni1993@naver.com"
+    "email": "thx.manager@gmail.com"
 }',
    CURLOPT_HTTPHEADER => array(
     'access_token: '.$token['AT_ACCESS_TOKEN'],
