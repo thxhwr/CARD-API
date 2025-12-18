@@ -17,7 +17,7 @@ curl_setopt_array($curl, array(
    CURLOPT_POSTFIELDS =>'{
     "userId": 2222539,
     "orderNo": "4937280063696510",
-    "amount": 10,
+    "amount": -10,
     "remark": "test"
 }',
    CURLOPT_HTTPHEADER => array(
