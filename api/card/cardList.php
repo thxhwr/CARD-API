@@ -16,7 +16,7 @@ curl_setopt_array($curl, array(
    CURLOPT_CUSTOMREQUEST => 'POST',
    CURLOPT_POSTFIELDS =>'{
     "cardholderId": 2222539,
-    "status": "86",
+    "status": "4",
     "cardMode": 1,
     "pageIndex": "1",
     "pageSize": "10"
