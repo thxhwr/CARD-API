@@ -86,15 +86,31 @@ $sign = generateSign($data, SECRET_KEY);
  * Response Code 정의
  * ========================= */
 
+// 성공
 const RES_SUCCESS              = 0;
+
+// 요청 파라미터 오류 (1000번대)
 const RES_INVALID_PARAM        = 1001;
 const RES_INVALID_EMAIL        = 1002;
 const RES_INVALID_PASSWORD     = 1003;
+const RES_ACCOUNT_REQUIRED     = 1004;
+const RES_ACCOUNT_DUPLICATED   = 1005;
+
+// 외부 API 오류 (2000번대)
 const RES_API_CALL_FAIL        = 2001;
 const RES_API_RESPONSE_ERROR   = 2002;
+
+// 회원 관련 오류 (3000번대)
 const RES_USER_NOT_FOUND       = 3001;
 const RES_USER_DISABLED        = 3002;
 const RES_PASSWORD_MISMATCH    = 3003;
+const RES_DUPLICATE_ACCOUNT    = 3004;
+
+// 추천인 관련 오류 (4000번대)
+const RES_INVALID_REFERRER     = 4001;
+const RES_REFERRER_NOT_FOUND   = 4002;
+
+// 시스템 오류 (9000번대)
 const RES_SYSTEM_ERROR         = 9000;
 
 /* =========================
@@ -104,15 +120,31 @@ const RES_SYSTEM_ERROR         = 9000;
 function getResMessage(int $code): string
 {
     $messages = [
+        // 성공
         RES_SUCCESS              => '성공',
+
+        // 요청 파라미터
         RES_INVALID_PARAM        => '필수 파라미터가 누락되었습니다.',
         RES_INVALID_EMAIL        => '아이디 형식이 올바르지 않습니다.',
         RES_INVALID_PASSWORD     => '비밀번호 형식이 올바르지 않습니다.',
+        RES_ACCOUNT_REQUIRED     => '아이디는 필수입니다.',
+        RES_ACCOUNT_DUPLICATED   => '이미 존재하는 아이디입니다.',
+
+        // 외부 API
         RES_API_CALL_FAIL        => '외부 API 호출 실패',
         RES_API_RESPONSE_ERROR   => 'API 응답 오류',
+
+        // 회원
         RES_USER_NOT_FOUND       => '존재하지 않는 회원입니다.',
         RES_USER_DISABLED        => '비활성화된 계정입니다.',
         RES_PASSWORD_MISMATCH    => '아이디 또는 비밀번호가 일치하지 않습니다.',
+        RES_DUPLICATE_ACCOUNT    => '이미 발급신청한 아이디입니다.',
+
+        // 추천인
+        RES_INVALID_REFERRER     => '유효하지 않은 추천인입니다.',
+        RES_REFERRER_NOT_FOUND   => '존재하지 않는 추천인입니다.',
+
+        // 시스템
         RES_SYSTEM_ERROR         => '시스템 오류',
     ];
 
@@ -220,5 +252,45 @@ function assignDeptAndParent(PDO $pdo): array
         'dept_no' => $deptNo,
         'parent_user_id' => $parentUserId
     ];
+}
+
+/**
+ * 이름 유효성 검사
+ * - 한글/영문/공백 허용
+ * - 2~30자
+ */
+function isValidName(string $name): bool
+{
+    $name = trim($name);
+
+    if ($name === '') {
+        return false;
+    }
+
+    return (bool)preg_match('/^[가-힣a-zA-Z\s]{2,30}$/u', $name);
+}
+
+/**
+ * 휴대폰 번호 유효성 검사
+ * - 010xxxxxxxx 형식
+ * - 하이픈 없이
+ */
+function isValidPhone(string $phone): bool
+{
+    $phone = preg_replace('/\D/', '', $phone); // 숫자만 남김
+
+    return (bool)preg_match('/^01[0-9]{8,9}$/', $phone);
+}
+
+/**
+ * 주소 유효성 검사
+ * - 최소 5자 이상
+ * - 특수문자 대부분 허용
+ */
+function isValidAddress(string $address): bool
+{
+    $address = trim($address);
+
+    return mb_strlen($address, 'UTF-8') >= 5;
 }
 ?>
