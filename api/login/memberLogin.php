@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
 try {
-    $memberId = $_POST['memberId'] ?? '';
+    $memberId = $_POST['memberId'] ?? 'thx.manager@gmail.com';
     $password = $_POST['memberPw'] ?? '';
 
     if (empty($memberId) || empty($password)) {
@@ -47,6 +47,7 @@ try {
     $memberInfo = json_decode($response, true);
     curl_close($curl);
 
+    print_r($memberInfo);
     if (($memberInfo['status'] ?? '') !== 'SUCCESS') {
         insertLoginLog([
             'account_no'   => $memberId,
