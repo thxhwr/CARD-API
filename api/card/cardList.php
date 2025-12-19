@@ -6,7 +6,7 @@ require_once BASE_PATH . '/config/accessToken.php';
 $curl = curl_init();
 
 curl_setopt_array($curl, array(
-   CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/cards/list',
+   CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/cardholder/list',
    CURLOPT_RETURNTRANSFER => true,
    CURLOPT_ENCODING => '',
    CURLOPT_MAXREDIRS => 10,
@@ -16,10 +16,8 @@ curl_setopt_array($curl, array(
    CURLOPT_CUSTOMREQUEST => 'POST',
    CURLOPT_POSTFIELDS =>'{
     "cardholderId": 2222539,
-    "status": "4",
-    "cardMode": 2,
-    "pageIndex": "1",
-    "pageSize": "10"
+    "status": 2,
+    "email": "thx.manager@gmail.com"
 }',
    CURLOPT_HTTPHEADER => array(
     'access_token: '.$token['AT_ACCESS_TOKEN'],
