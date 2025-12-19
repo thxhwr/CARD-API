@@ -95,6 +95,9 @@ const RES_INVALID_EMAIL        = 1002;
 const RES_INVALID_PASSWORD     = 1003;
 const RES_ACCOUNT_REQUIRED     = 1004;
 const RES_ACCOUNT_DUPLICATED   = 1005;
+const RES_INVALID_PHONE        = 1006;
+const RES_INVALID_ADDRESS      = 1007;
+const RES_INVALID_NAME         = 1008;
 
 // 외부 API 오류 (2000번대)
 const RES_API_CALL_FAIL        = 2001;
@@ -129,7 +132,10 @@ function getResMessage(int $code): string
         RES_INVALID_PASSWORD     => '비밀번호 형식이 올바르지 않습니다.',
         RES_ACCOUNT_REQUIRED     => '아이디는 필수입니다.',
         RES_ACCOUNT_DUPLICATED   => '이미 존재하는 아이디입니다.',
-
+        RES_INVALID_PHONE        => '전화번호 형식이 올바르지 않습니다.',
+        RES_INVALID_ADDRESS      => '주소 형식이 올바르지 않습니다.',
+        RES_INVALID_NAME         => '이름 형식이 올바르지 않습니다.',
+        
         // 외부 API
         RES_API_CALL_FAIL        => '외부 API 호출 실패',
         RES_API_RESPONSE_ERROR   => 'API 응답 오류',
