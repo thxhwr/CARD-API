@@ -97,6 +97,7 @@ try {
             ADDRESS
         ) VALUES (
             :user_id,
+            :referrer_user_id,
             :account_no,
             :dept,
             :dept_no,
@@ -108,15 +109,15 @@ try {
     ");
 
     $stmt->execute([
-        ':user_id'        => $userId,
-        ':referrerUserId,'=> $referrerUserId,
-        ':account_no'     => $accountNo,
-        ':dept'           => $pos['dept'],
-        ':dept_no'        => $pos['dept_no'],
-        ':parent_user_id' => $pos['parent_user_id'],
-        ':name'           => $name,
-        ':phone'          => $phone,
-        ':address'        => $address,
+        ':user_id'           => $userId,
+        ':referrer_user_id'  => $referrerUserId,
+        ':account_no'        => $accountNo,
+        ':dept'              => $pos['dept'],
+        ':dept_no'           => $pos['dept_no'],
+        ':parent_user_id'    => $pos['parent_user_id'],
+        ':name'              => $name,
+        ':phone'             => $phone,
+        ':address'           => $address,
     ]);
 
     $pdo->commit();
