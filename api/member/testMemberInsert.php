@@ -57,8 +57,6 @@ if (!$referrerUserId) {
     jsonResponse(RES_REFERRER_NOT_FOUND, [], 404);
 }
 
-$referrerUserId = (int)$referrerRow['USER_ID'];
-
 try {
 
     if ($name === '' || $phone === '' || $address === '') {
