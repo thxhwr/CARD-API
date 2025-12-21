@@ -2,8 +2,7 @@
 require_once __DIR__ . '/../../config/bootstrap.php';
 
 try {
-    // $loginUserId = (int)$_POST['userId'];
-    $loginUserId = 1;
+    $loginUserId = (int)$_POST['userId'];
 
     $stmt = $pdo->query("
         SELECT
