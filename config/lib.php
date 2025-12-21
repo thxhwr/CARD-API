@@ -135,7 +135,7 @@ function getResMessage(int $code): string
         RES_INVALID_PHONE        => '전화번호 형식이 올바르지 않습니다.',
         RES_INVALID_ADDRESS      => '주소 형식이 올바르지 않습니다.',
         RES_INVALID_NAME         => '이름 형식이 올바르지 않습니다.',
-        
+
         // 외부 API
         RES_API_CALL_FAIL        => '외부 API 호출 실패',
         RES_API_RESPONSE_ERROR   => 'API 응답 오류',
@@ -299,4 +299,24 @@ function isValidAddress(string $address): bool
 
     return mb_strlen($address, 'UTF-8') >= 5;
 }
+
+function buildTree(array $members, int $rootUserId): array
+{
+    $map = [];
+    foreach ($members as $m) {
+        $m['children'] = [];
+        $map[$m['USER_ID']] = $m;
+    }
+
+    $tree = null;
+
+    foreach ($map as $userId => &$node) {
+        if ($node['PARENT_USER_ID'] === $rootUserId) {
+            $map[$rootUserId]['children'][] = &$node;
+        }
+    }
+
+    return $map[$rootUserId];
+}
+
 ?>
