@@ -2,34 +2,61 @@
 require_once __DIR__ . '/../../config/bootstrap.php';
 
 try {
-    $loginUserId = (int)$_POST['userId'];
+    $accountNo = strtolower(trim($_POST['accountNo'] ?? ''));
+
+    if ($accountNo === '') {
+        jsonResponse(RES_ACCOUNT_REQUIRED, [], 400);
+    }
+    
+    $stmt = $pdo->prepare("
+        SELECT USER_ID
+        FROM MEMBER
+        WHERE ACCOUNT_NO = ?
+        LIMIT 1
+    ");
+    $stmt->execute([$accountNo]);
+    
+    $loginUserId = $stmt->fetchColumn();
+
+    if (!$loginUserId) {
+        jsonResponse(RES_USER_NOT_FOUND, [], 404);
+    }
 
     $stmt = $pdo->query("
         SELECT
             USER_ID,
             PARENT_USER_ID,
-            NAME,
             ACCOUNT_NO,
+            NAME,
             DEPT,
             DEPT_NO
         FROM MEMBER
         ORDER BY DEPT ASC, DEPT_NO ASC
     ");
-
     $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    
     $map = [];
     foreach ($rows as $row) {
-        $row['children'] = [];
-        $map[$row['USER_ID']] = $row;
+        $map[$row['USER_ID']] = [
+            'userId'    => (int)$row['USER_ID'],
+            'accountNo' => $row['ACCOUNT_NO'],
+            'name'      => $row['NAME'],
+            'dept'      => (int)$row['DEPT'],
+            'deptNo'    => (int)$row['DEPT_NO'],
+            'children'  => [],
+            'parentId'  => $row['PARENT_USER_ID']
+        ];
     }
 
+    
     foreach ($map as $id => &$node) {
-        $parentId = $node['PARENT_USER_ID'];
+        $parentId = $node['parentId'];
         if ($parentId && isset($map[$parentId])) {
             $map[$parentId]['children'][] = &$node;
         }
     }
+    unset($node);
 
     if (!isset($map[$loginUserId])) {
         jsonResponse(RES_USER_NOT_FOUND, [], 404);
