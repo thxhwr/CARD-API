@@ -4,12 +4,12 @@ require_once BASE_PATH . '/config/accessToken.php';
 
 $referrerUserId = null;
 
-$referrerAccountNo = trim($_POST['referrerAccountNo'] ?? 'kni1993@naver.com ');
-$userId = trim($_POST['userId'] ?? '2222560');
-$accountNo = trim($_POST['accountNo'] ?? 'ksw9315@nate.com');
-$name    = trim($_POST['name'] ?? '강싱싱');
-$phone   = trim($_POST['phone'] ?? '01089898989');
-$address = trim($_POST['address'] ?? '경기 평택시 포승읍 원정리 1277 빌딩');
+$referrerAccountNo = trim($_POST['referrerAccountNo'] ?? '');
+$userId = trim($_POST['userId'] ?? '');
+$accountNo = trim($_POST['accountNo'] ?? '');
+$name    = trim($_POST['name'] ?? '');
+$phone   = trim($_POST['phone'] ?? '');
+$address = trim($_POST['address'] ?? '');
 
 // $accountNo = 'test' . time() . '@test.com';
 
