@@ -166,7 +166,7 @@ try {
             FROM MEMBER
             WHERE USER_ID = ?
         ");
-        $stmt->execute([$buyerUserId]);
+        $stmt->execute([$userId]);
         $parentId = $stmt->fetchColumn();
 
         $stmt = $pdo->prepare("
