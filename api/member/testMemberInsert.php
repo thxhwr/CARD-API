@@ -6,7 +6,7 @@ $referrerUserId = null;
 
 $referrerAccountNo = trim($_POST['referrerAccountNo'] ?? 'kni1993@naver.com');
 $accountNo = trim($_POST['accountNo'] ?? 'ksw9315@nate.com');
-$name    = trim($_POST['name'] ?? '1234');
+$name    = trim($_POST['name'] ?? '최지헌');
 $phone   = trim($_POST['phone'] ?? '01012341234');
 $address = trim($_POST['address'] ?? '1234');
 
