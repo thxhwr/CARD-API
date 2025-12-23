@@ -166,8 +166,6 @@ try {
             ':address'           => $address,
         ]);
 
-        $pdo->commit();
-
         $maxLevel = 3;
         $level    = 1;
         
