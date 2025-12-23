@@ -169,18 +169,24 @@ function getResMessage(int $code): string
  * 공통 JSON 응답 함수
  * ========================= */
 
-function jsonResponse(int $code, array $data = [], int $httpStatus = 200): never
-{
+function jsonResponse(
+    int $code,
+    array $data = [],
+    int $totalLine = 0,
+    int $httpStatus = 200
+): never {
     http_response_code($httpStatus);
 
     echo json_encode([
-        'resCode' => $code,
-        'message' => getResMessage($code),
-        'data'    => $data
+        'resCode'   => $code,
+        'message'   => getResMessage($code),
+        'data'      => $data,
+        'totalLine' => $totalLine
     ], JSON_UNESCAPED_UNICODE);
 
     exit;
 }
+
 
 function insertLoginLog(array $params): void
 {
