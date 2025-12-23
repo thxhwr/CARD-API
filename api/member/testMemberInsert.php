@@ -114,8 +114,6 @@ try {
     $status = $payout['status'] ?? '';
     curl_close($curl);
     
-    print_r($payout);
-    exit;
     switch ($status) {
         case 'SUCCESS':
             break;
