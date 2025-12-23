@@ -91,8 +91,8 @@ try {
     $orderNo = date('YmdHis') . '-' . random_int(1000, 9999);
     $postData = [
         'userId'  => $userId,
-        'orderNo' => -abs($orderNo),
-        'amount'  => $usePoint,
+        'orderNo' => $orderNo,
+        'amount'  => -abs($usePoint),
         'remark'  => '오프라인 카드 신청',
     ];
 
@@ -248,7 +248,7 @@ try {
         }
 
         $pdo->commit();
-        
+
         jsonResponse(RES_SUCCESS, [
             'userId' => $userId
         ]);
