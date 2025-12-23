@@ -187,12 +187,13 @@ try {
         $rewardRates = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
         while ($level <= $maxLevel) {
-            echo "1234";
             if (!$parentId) {
+                echo "1";
                 break;
             }
 
             if (!isset($rewardRates[$level])) {
+                echo "2";
                 break;
             }
 
@@ -200,6 +201,7 @@ try {
             $rewardTotal = (int)floor($usePoint * ($ratePercent / 100));
 
             if ($rewardTotal <= 0) {
+                echo "3";
                 break;
             }
 
