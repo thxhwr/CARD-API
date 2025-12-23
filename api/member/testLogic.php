@@ -7,7 +7,7 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 try {
     $pdo->beginTransaction();
 
-    $buyerUserId = 18;
+    $buyerUserId = 5;
     $orderId     = 'ORDER_TEST_002';
     $price       = 50000;
 
