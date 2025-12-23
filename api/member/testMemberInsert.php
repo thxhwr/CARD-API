@@ -125,6 +125,8 @@ try {
         default:
             jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
     }
+    print_r($status);
+    print_r($payout);
     exit;
 
 
