@@ -81,7 +81,7 @@ try {
     $postData = [
         'userId'  => $userId,
         'orderNo' => $orderNo,
-        'amount'  => -1000,
+        'amount'  => 5,
         'remark'  => '오프라인 카드 신청',
     ];
 
