@@ -15,8 +15,8 @@ curl_setopt_array($curl, array(
    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
    CURLOPT_CUSTOMREQUEST => 'POST',
    CURLOPT_POSTFIELDS =>'{
-    "userId": 2222539,
-    "orderNo": "4937280063696510",
+    "userId": 2222550,
+    "orderNo": "2",
     "amount": -10,
     "remark": "test"
 }',

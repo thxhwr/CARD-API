@@ -82,6 +82,7 @@ try {
         jsonResponse(RES_SUCCESS, [
             'accountNo'    => $memberInfo['data'][0]['accountNo'],
             'userId' => $memberInfo['data'][0]['userId'],
+            'balance' => $memberInfo['data'][0]['balance'],
             'status' => $memberInfo['data'][0]['status']
         ]);
     }else{
