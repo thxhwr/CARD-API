@@ -63,6 +63,8 @@ if (!$referrerUserId) {
     jsonResponse(RES_REFERRER_NOT_FOUND, [], 404);
 }
 
+$pdo->beginTransaction();
+
 try {
 
     if ($name === '' || $phone === '' || $address === '') {
@@ -122,9 +124,8 @@ try {
     $payout = json_decode($response, true);
     $status = $payout['status'] ?? '';
     curl_close($curl);
-    
+
     if ($status === 'SUCCESS') {
-        $pdo->beginTransaction();
         $pos = assignDeptAndParent($pdo);
         $userId = (int)$pdo->query("SELECT IFNULL(MAX(USER_ID), 0) + 1 FROM MEMBER")
                         ->fetchColumn();
@@ -169,8 +170,6 @@ try {
 
         $maxLevel = 3;
         $level    = 1;
-
-        $pdo->beginTransaction();
         
         $stmt = $pdo->prepare("
             SELECT PARENT_USER_ID
@@ -247,6 +246,7 @@ try {
 
             $level++;
         }
+
         $pdo->commit();
         
         jsonResponse(RES_SUCCESS, [
