@@ -5,7 +5,7 @@ require_once BASE_PATH . '/config/accessToken.php';
 $referrerUserId = null;
 
 $referrerAccountNo = trim($_POST['referrerAccountNo'] ?? 'kni1993@naver.com');
-$accountNo = trim($_POST['accountNo'] ?? 'ksw9315@nate.com');
+$accountNo = trim($_POST['accountNo'] ?? 'ksw93152@nate.com');
 $name    = trim($_POST['name'] ?? '최지헌');
 $phone   = trim($_POST['phone'] ?? '01012341234');
 $address = trim($_POST['address'] ?? '28562 충북 청주시 서원구 1순환로 627 빌딩');
@@ -88,7 +88,7 @@ try {
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_POSTFIELDS =>'{
-        "userId": 2222560,
+        "userId": 11,
         "orderNo": "1234",
         "amount": -1000,
         "remark": "test"
@@ -106,9 +106,15 @@ try {
 
     $response = curl_exec($curl);
 
+    $payout = json_decode($response, true);
     curl_close($curl);
-    echo $response;
+    print_r($payout);
     exit;
+    if (($payout['status'] ?? '') !== 'SUCCESS') {
+        jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
+    }
+
+
     $pdo->beginTransaction();
 
     $pos = assignDeptAndParent($pdo);
