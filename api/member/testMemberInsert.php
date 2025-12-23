@@ -108,7 +108,7 @@ try {
 
     $payout = json_decode($response, true);
     curl_close($curl);
-    
+    print_r($payout);
     if (($payout['status'] ?? '') !== 'SUCCESS') {
         jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
     }
