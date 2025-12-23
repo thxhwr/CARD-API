@@ -188,21 +188,17 @@ try {
 
         while ($level <= $maxLevel) {
             if (!$parentId) {
-                echo "1";
                 break;
             }
 
             if (!isset($rewardRates[$level])) {
-                echo "2";
                 break;
             }
 
             $ratePercent = (float)$rewardRates[$level];
-            $rewardTotal = (int)floor($usePoint * $rate);
+            $rewardTotal = (int)floor($usePoint * $ratePercent);
 
             if ($rewardTotal <= 0) {
-                echo $ratePercent;
-                echo $rewardTotal;
                 break;
             }
 
