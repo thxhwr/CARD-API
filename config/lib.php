@@ -113,6 +113,10 @@ const RES_DUPLICATE_ACCOUNT    = 3004;
 const RES_INVALID_REFERRER     = 4001;
 const RES_REFERRER_NOT_FOUND   = 4002;
 
+
+// 출금 관련 오류 (5000번대)
+const RES_POINT_LACK           = 5001;
+
 // 시스템 오류 (9000번대)
 const RES_SYSTEM_ERROR         = 9000;
 
@@ -148,6 +152,7 @@ function getResMessage(int $code): string
 
         // 출금
         RES_POINT_LACK           => '잔액이 부족합니다.',
+
         // 추천인
         RES_INVALID_REFERRER     => '유효하지 않은 추천인입니다.',
         RES_REFERRER_NOT_FOUND   => '존재하지 않는 추천인입니다.',

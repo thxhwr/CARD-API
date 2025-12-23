@@ -114,20 +114,15 @@ try {
     $status = $payout['status'] ?? '';
     curl_close($curl);
     
-    print_r($status);
-    print_r($payout);
-    exit;
-    
-    switch ($status) {
-        case 'SUCCESS':
-            break;
-    
-        case 'ERROR_1118':
+    if ($status === 'SUCCESS') {
+        echo "성공";
+        // 정상 처리 계속 진행
+    } else {
+        if ($status === 'ERROR_1118') {
             jsonResponse(RES_POINT_LACK, [], 400);
-            break;
+        }
     
-        default:
-            jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
+        jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
     }
 
 
