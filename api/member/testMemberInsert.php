@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../config/bootstrap.php';
+require_once BASE_PATH . '/config/accessToken.php';
 
 $referrerUserId = null;
 
@@ -79,6 +80,39 @@ try {
 
     $pos = assignDeptAndParent($pdo);
 
+    $curl = curl_init();
+
+    curl_setopt_array($curl, array(
+    CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/station/user/payment',
+    CURLOPT_RETURNTRANSFER => true,
+    CURLOPT_ENCODING => '',
+    CURLOPT_MAXREDIRS => 10,
+    CURLOPT_TIMEOUT => 0,
+    CURLOPT_FOLLOWLOCATION => true,
+    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    CURLOPT_CUSTOMREQUEST => 'POST',
+    CURLOPT_POSTFIELDS =>'{
+        "userId": 2222539,
+        "orderNo": "4937280063696510",
+        "amount": -10,
+        "remark": "test"
+    }',
+    CURLOPT_HTTPHEADER => array(
+        'access_token: '.$token['AT_ACCESS_TOKEN'],
+        'clientId: 74c01d46896d48608367e308edf9e7f1',
+        'nonce: '.$nonce,
+        'timestamp: '.$timestamp,
+        'sign: '.$sign,
+        'Accept-Language: ko-KR',
+        'Content-Type: application/json'
+    ),
+    ));
+
+    $response = curl_exec($curl);
+
+    curl_close($curl);
+    echo $response;
+    
     $userId = (int)$pdo->query("SELECT IFNULL(MAX(USER_ID), 0) + 1 FROM MEMBER")
                        ->fetchColumn();
 
