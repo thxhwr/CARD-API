@@ -122,7 +122,7 @@ try {
     if ($status === 'SUCCESS') {
         $pdo->beginTransaction();
         $pos = assignDeptAndParent($pdo);
-        $userId = (int)$pdo->query("SELECT IFNULL(MAX(USER_ID), 0) + 1 FROM MEMBER")
+        $posUserId = (int)$pdo->query("SELECT IFNULL(MAX(USER_ID), 0) + 1 FROM MEMBER")
                         ->fetchColumn();
 
         $stmt = $pdo->prepare("
@@ -150,7 +150,7 @@ try {
         ");
 
         $stmt->execute([
-            ':user_id'           => $userId,
+            ':user_id'           => $posUserId,
             ':referrer_user_id'  => $referrerUserId,
             ':account_no'        => $accountNo,
             ':dept'              => $pos['dept'],
@@ -186,26 +186,8 @@ try {
 
         $rewardRates = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-        $ratePercent = (float)$rewardRates[$level];
-        $rewardTotal = (int)floor($usePoint * ($ratePercent / 100));
-
-        $spAmount = (int)floor($rewardTotal / 2);
-        $tpAmount = $rewardTotal - $spAmount;
-
-        print_r([
-            ':uid'    => $parentId,
-            ':amt'    => $spAmount,
-            ':desc'   => "추천 {$level}대 보상 (SP)",
-            ':ref_id' => $orderNo,
-        ]);
-
-        print_r($rewardRates);
-
-        print_r($parentId);
-        exit;
-
         while ($level <= $maxLevel) {
-
+            echo "1234";
             if (!$parentId) {
                 break;
             }
@@ -260,6 +242,8 @@ try {
 
             $level++;
         }
+
+        exit;
         echo "USER_ID : {$userId}\n";
         echo "referrerUserId : {$referrerUserId}\n";
         echo "ACCOUNT : {$accountNo}\n";
