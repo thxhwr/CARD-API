@@ -5,7 +5,7 @@ require_once BASE_PATH . '/config/accessToken.php';
 $referrerUserId = null;
 
 $referrerAccountNo = trim($_POST['referrerAccountNo'] ?? 'kni1993@naver.com');
-$accountNo = trim($_POST['accountNo'] ?? 'ksw9315@nate.com');
+$accountNo = trim($_POST['accountNo'] ?? '@nate.com');
 $name    = trim($_POST['name'] ?? '최지헌');
 $phone   = trim($_POST['phone'] ?? '01012341234');
 $address = trim($_POST['address'] ?? '28562 충북 청주시 서원구 1순환로 627 빌딩');
@@ -90,7 +90,7 @@ try {
     CURLOPT_POSTFIELDS =>'{
         "userId": 2222539,
         "orderNo": "4937280063696510",
-        "amount": -10,
+        "amount": -1000,
         "remark": "test"
     }',
     CURLOPT_HTTPHEADER => array(
