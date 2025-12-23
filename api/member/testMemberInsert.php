@@ -76,10 +76,6 @@ try {
         jsonResponse(RES_INVALID_ADDRESS, [], 400);
     }
 
-    $pdo->beginTransaction();
-
-    $pos = assignDeptAndParent($pdo);
-
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
@@ -112,6 +108,10 @@ try {
 
     curl_close($curl);
     echo $response;
+    exit;
+    $pdo->beginTransaction();
+
+    $pos = assignDeptAndParent($pdo);
     
     $userId = (int)$pdo->query("SELECT IFNULL(MAX(USER_ID), 0) + 1 FROM MEMBER")
                        ->fetchColumn();
