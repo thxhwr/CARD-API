@@ -3,11 +3,8 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
 try {
-    // $memberId = $_POST['memberId'] ?? '';
-    // $password = $_POST['memberPw'] ?? '';
-
-    $memberId = 'thx.manager@gmail.com';
-    $password = '123456';
+    $memberId = $_POST['memberId'] ?? '';
+    $password = $_POST['memberPw'] ?? '';
 
     if (empty($memberId) || empty($password)) {
         jsonResponse(RES_API_RESPONSE_ERROR, [], 400);
