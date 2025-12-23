@@ -122,7 +122,7 @@ try {
     if ($status === 'SUCCESS') {
         $pdo->beginTransaction();
         $pos = assignDeptAndParent($pdo);
-        $posUserId = (int)$pdo->query("SELECT IFNULL(MAX(USER_ID), 0) + 1 FROM MEMBER")
+        $userId = (int)$pdo->query("SELECT IFNULL(MAX(USER_ID), 0) + 1 FROM MEMBER")
                         ->fetchColumn();
 
         $stmt = $pdo->prepare("
@@ -150,7 +150,7 @@ try {
         ");
 
         $stmt->execute([
-            ':user_id'           => $posUserId,
+            ':user_id'           => $userId,
             ':referrer_user_id'  => $referrerUserId,
             ':account_no'        => $accountNo,
             ':dept'              => $pos['dept'],
