@@ -158,6 +158,85 @@ try {
 
         $pdo->commit();
 
+        $maxLevel = 3;
+        $level    = 1;
+
+        $stmt = $pdo->prepare("
+            SELECT PARENT_USER_ID
+            FROM MEMBER
+            WHERE USER_ID = ?
+        ");
+        $stmt->execute([$buyerUserId]);
+        $parentId = $stmt->fetchColumn();
+
+        $stmt = $pdo->prepare("
+            SELECT LEVEL, RATE
+            FROM REFERRAL_REWARD_RATE
+            WHERE IS_ACTIVE = 'Y'
+            AND LEVEL BETWEEN 1 AND :max_level
+            ORDER BY LEVEL ASC
+        ");
+        $stmt->bindValue(':max_level', $maxLevel, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $rewardRates = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
+
+        while ($level <= $maxLevel) {
+
+            if (!$parentId) {
+                break;
+            }
+
+            if (!isset($rewardRates[$level])) {
+                break;
+            }
+
+            $ratePercent = (float)$rewardRates[$level];
+            $rewardTotal = (int)floor($usePoint * ($ratePercent / 100));
+
+            if ($rewardTotal <= 0) {
+                break;
+            }
+
+            $spAmount = (int)floor($rewardTotal / 2);
+            $tpAmount = $rewardTotal - $spAmount;
+
+            $stmt = $pdo->prepare("
+                INSERT INTO POINT_LOG
+                    (USER_ID, TYPE_CODE, ACTION_TYPE, AMOUNT, DESCRIPTION, REF_ID)
+                VALUES
+                    (:uid, 'SP', 'IN', :amt, :desc, :ref_id)
+            ");
+            $stmt->execute([
+                ':uid'    => $parentId,
+                ':amt'    => $spAmount,
+                ':desc'   => "추천 {$level}대 보상 (SP)",
+                ':ref_id' => $orderId,
+            ]);
+
+            $stmt = $pdo->prepare("
+                INSERT INTO POINT_LOG
+                    (USER_ID, TYPE_CODE, ACTION_TYPE, AMOUNT, DESCRIPTION, REF_ID)
+                VALUES
+                    (:uid, 'TP', 'IN', :amt, :desc, :ref_id)
+            ");
+            $stmt->execute([
+                ':uid'    => $parentId,
+                ':amt'    => $tpAmount,
+                ':desc'   => "추천 {$level}대 보상 (TP)",
+                ':ref_id' => $orderId,
+            ]);
+
+            $stmt = $pdo->prepare("
+                SELECT PARENT_USER_ID
+                FROM MEMBER
+                WHERE USER_ID = ?
+            ");
+            $stmt->execute([$parentId]);
+            $parentId = $stmt->fetchColumn();
+
+            $level++;
+        }
         echo "USER_ID : {$userId}\n";
         echo "referrerUserId : {$referrerUserId}\n";
         echo "ACCOUNT : {$accountNo}\n";
