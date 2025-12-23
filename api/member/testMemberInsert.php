@@ -84,7 +84,7 @@ try {
 
     //
 
-    $usePoint = 10;
+    $usePoint = 100;
 
     $orderNo = date('YmdHis') . '-' . random_int(1000, 9999);
     $postData = [
@@ -246,13 +246,9 @@ try {
             $level++;
         }
 
-        exit;
-        echo "USER_ID : {$userId}\n";
-        echo "referrerUserId : {$referrerUserId}\n";
-        echo "ACCOUNT : {$accountNo}\n";
-        echo "DEPT    : {$pos['dept']}\n";
-        echo "DEPT_NO : {$pos['dept_no']}\n";
-        echo "PARENT  : {$pos['parent_user_id']}\n";
+        jsonResponse(RES_SUCCESS, [
+            'userId' => $userId
+        ]);
     } else {
         if ($status === 'ERROR_1118') {
             jsonResponse(RES_POINT_LACK, [], 400);
