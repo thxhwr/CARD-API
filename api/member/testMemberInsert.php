@@ -88,8 +88,8 @@ try {
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_POSTFIELDS =>'{
-        "userId": 2222539,
-        "orderNo": "4937280063696510",
+        "userId": 2222560,
+        "orderNo": "1234",
         "amount": -1000,
         "remark": "test"
     }',
