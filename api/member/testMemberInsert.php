@@ -186,6 +186,18 @@ try {
 
         $rewardRates = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
+        print_r([
+            ':uid'    => $parentId,
+            ':amt'    => $spAmount,
+            ':desc'   => "추천 {$level}대 보상 (SP)",
+            ':ref_id' => $orderNo,
+        ]);
+
+        print_r($rewardRates);
+
+        print_r($parentId);
+        exit;
+
         while ($level <= $maxLevel) {
 
             if (!$parentId) {
