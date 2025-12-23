@@ -5,6 +5,7 @@ require_once BASE_PATH . '/config/accessToken.php';
 $referrerUserId = null;
 
 $referrerAccountNo = trim($_POST['referrerAccountNo'] ?? 'kni1993@naver.com');
+$userId = trim($_POST['userId'] ?? '2222560');
 $accountNo = trim($_POST['accountNo'] ?? 'ksw93152@nate.com');
 $name    = trim($_POST['name'] ?? '최지헌');
 $phone   = trim($_POST['phone'] ?? '01012341234');
@@ -76,6 +77,14 @@ try {
         jsonResponse(RES_INVALID_ADDRESS, [], 400);
     }
 
+    $orderNo = date('YmdHis') . '-' . random_int(1000, 9999);
+    $postData = [
+        'userId'  => $userId,
+        'orderNo' => $orderNo,
+        'amount'  => 100,
+        'remark'  => '오프라인 카드 신청',
+    ];
+
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
@@ -87,12 +96,7 @@ try {
     CURLOPT_FOLLOWLOCATION => true,
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => 'POST',
-    CURLOPT_POSTFIELDS =>'{
-        "userId": 11,
-        "orderNo": "1234",
-        "amount": -1000,
-        "remark": "test"
-    }',
+    CURLOPT_POSTFIELDS =>json_encode($postData, JSON_UNESCAPED_UNICODE),
     CURLOPT_HTTPHEADER => array(
         'access_token: '.$token['AT_ACCESS_TOKEN'],
         'clientId: 74c01d46896d48608367e308edf9e7f1',
@@ -107,10 +111,21 @@ try {
     $response = curl_exec($curl);
 
     $payout = json_decode($response, true);
+    $status = $payout['status'] ?? '';
     curl_close($curl);
+    
     print_r($payout);
-    if (($payout['status'] ?? '') !== 'SUCCESS') {
-        jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
+    exit;
+    switch ($status) {
+        case 'SUCCESS':
+            break;
+    
+        case 'ERROR_1118':
+            jsonResponse(RES_POINT_LACK, [], 400);
+            break;
+    
+        default:
+            jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
     }
     exit;
 

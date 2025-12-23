@@ -146,12 +146,15 @@ function getResMessage(int $code): string
         RES_PASSWORD_MISMATCH    => '아이디 또는 비밀번호가 일치하지 않습니다.',
         RES_DUPLICATE_ACCOUNT    => '이미 발급신청한 아이디입니다.',
 
+        // 출금
+        RES_POINT_LACK           => '잔액이 부족합니다.',
         // 추천인
         RES_INVALID_REFERRER     => '유효하지 않은 추천인입니다.',
         RES_REFERRER_NOT_FOUND   => '존재하지 않는 추천인입니다.',
 
         // 시스템
         RES_SYSTEM_ERROR         => '시스템 오류',
+
     ];
 
     return $messages[$code] ?? '알 수 없는 오류';
