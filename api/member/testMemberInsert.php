@@ -170,6 +170,8 @@ try {
         $maxLevel = 3;
         $level    = 1;
 
+        $pdo->beginTransaction();
+        
         $stmt = $pdo->prepare("
             SELECT PARENT_USER_ID
             FROM MEMBER
