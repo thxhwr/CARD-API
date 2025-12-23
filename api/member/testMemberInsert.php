@@ -81,7 +81,7 @@ try {
     //
 
     $usePoint = 10;
-    
+
     $orderNo = date('YmdHis') . '-' . random_int(1000, 9999);
     $postData = [
         'userId'  => $userId,
@@ -216,7 +216,7 @@ try {
                 ':uid'    => $parentId,
                 ':amt'    => $spAmount,
                 ':desc'   => "추천 {$level}대 보상 (SP)",
-                ':ref_id' => $orderId,
+                ':ref_id' => $orderNo,
             ]);
 
             $stmt = $pdo->prepare("
@@ -229,7 +229,7 @@ try {
                 ':uid'    => $parentId,
                 ':amt'    => $tpAmount,
                 ':desc'   => "추천 {$level}대 보상 (TP)",
-                ':ref_id' => $orderId,
+                ':ref_id' => $orderNo,
             ]);
 
             $stmt = $pdo->prepare("
