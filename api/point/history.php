@@ -2,8 +2,8 @@
 require_once __DIR__ . '/../../config/bootstrap.php';
 
 try {
-    $accountNo = trim($_POST['accountNo'] ?? 'rkdzhd9310@naver.com');
-    $typeCode  = trim($_POST['typeCode'] ?? 'TP');
+    $accountNo = trim($_POST['accountNo'] ?? '');
+    $typeCode  = trim($_POST['typeCode'] ?? '');
     $page      = max(1, (int)($_POST['page'] ?? 1));
     $limit     = min(100, max(10, (int)($_POST['limit'] ?? 20)));
     $offset    = ($page - 1) * $limit;
