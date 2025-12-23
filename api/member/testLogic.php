@@ -32,7 +32,7 @@ try {
     }
 
     $parentId = $current['PARENT_USER_ID'];
-    $level    = 1;
+    $level    = 3;
 
     while ($parentId && isset($rewardRates[$level])) {
 
