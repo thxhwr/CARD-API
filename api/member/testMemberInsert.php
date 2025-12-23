@@ -77,11 +77,16 @@ try {
         jsonResponse(RES_INVALID_ADDRESS, [], 400);
     }
 
+
+    //
+
+    $usePoint = 10;
+    
     $orderNo = date('YmdHis') . '-' . random_int(1000, 9999);
     $postData = [
         'userId'  => $userId,
         'orderNo' => $orderNo,
-        'amount'  => 5,
+        'amount'  => $usePoint,
         'remark'  => '오프라인 카드 신청',
     ];
 
