@@ -247,7 +247,8 @@ try {
 
             $level++;
         }
-
+        $pdo->commit();
+        
         jsonResponse(RES_SUCCESS, [
             'userId' => $userId
         ]);
