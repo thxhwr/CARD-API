@@ -186,6 +186,12 @@ try {
 
         $rewardRates = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
+        $ratePercent = (float)$rewardRates[$level];
+        $rewardTotal = (int)floor($usePoint * ($ratePercent / 100));
+
+        $spAmount = (int)floor($rewardTotal / 2);
+        $tpAmount = $rewardTotal - $spAmount;
+
         print_r([
             ':uid'    => $parentId,
             ':amt'    => $spAmount,
