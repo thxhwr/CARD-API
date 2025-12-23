@@ -47,8 +47,6 @@ try {
     $memberInfo = json_decode($response, true);
     curl_close($curl);
 
-    print_r($memberInfo);
-    exit;
     if (($memberInfo['status'] ?? '') !== 'SUCCESS') {
         insertLoginLog([
             'account_no'   => $memberId,
