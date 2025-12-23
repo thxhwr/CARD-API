@@ -201,7 +201,8 @@ try {
             $rewardTotal = (int)floor($usePoint * $rate);
 
             if ($rewardTotal <= 0) {
-                echo "3";
+                echo $ratePercent;
+                echo $rewardTotal;
                 break;
             }
 
