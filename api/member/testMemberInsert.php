@@ -9,7 +9,7 @@ $userId = trim($_POST['userId'] ?? '2222560');
 $accountNo = trim($_POST['accountNo'] ?? 'ksw9315@nate.com');
 $name    = trim($_POST['name'] ?? '강싱싱');
 $phone   = trim($_POST['phone'] ?? '01089898989');
-$address = trim($_POST['address'] ?? '17950 경기 평택시 포승읍 원정리 1277 빌딩');
+$address = trim($_POST['address'] ?? '경기 평택시 포승읍 원정리 1277 빌딩');
 
 // $accountNo = 'test' . time() . '@test.com';
 
