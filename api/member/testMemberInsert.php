@@ -170,12 +170,12 @@ try {
         $level    = 1;
         
         $stmt = $pdo->prepare("
-            SELECT PARENT_USER_ID
+            SELECT REFERRER_USER_ID
             FROM MEMBER
             WHERE USER_ID = ?
         ");
         $stmt->execute([$userId]);
-        $parentId = $stmt->fetchColumn();
+        $referrerId = $stmt->fetchColumn();
 
         $stmt = $pdo->prepare("
             SELECT LEVEL, RATE
@@ -189,8 +189,8 @@ try {
 
         $rewardRates = $stmt->fetchAll(PDO::FETCH_KEY_PAIR);
 
-        while ($level <= $maxLevel) {
-            if (!$parentId) {
+        while ($level <= $maxLevel && $referrerId) {
+            if (!$referrerId) {
                 break;
             }
 
@@ -200,6 +200,66 @@ try {
 
             $ratePercent = (float)$rewardRates[$level];
             $rewardTotal = (int)floor($usePoint * $ratePercent);
+
+            if ($rewardTotal <= 0) {
+                break;
+            }
+
+            $spAmount = (int)floor($rewardTotal / 2);
+            $tpAmount = $rewardTotal - $spAmount;
+
+            $stmt = $pdo->prepare("
+                INSERT INTO POINT_LOG
+                    (USER_ID, TYPE_CODE, ACTION_TYPE, AMOUNT, DESCRIPTION, REF_ID)
+                VALUES
+                    (:uid, 'SP', 'IN', :amt, :desc, :ref_id)
+            ");
+            $stmt->execute([
+                ':uid'    => $referrerId,
+                ':amt'    => $spAmount,
+                ':desc'   => "추천 {$level}대 보상 (SP)",
+                ':ref_id' => $orderNo,
+            ]);
+
+            $stmt = $pdo->prepare("
+                INSERT INTO POINT_LOG
+                    (USER_ID, TYPE_CODE, ACTION_TYPE, AMOUNT, DESCRIPTION, REF_ID)
+                VALUES
+                    (:uid, 'TP', 'IN', :amt, :desc, :ref_id)
+            ");
+            $stmt->execute([
+                ':uid'    => $referrerId,
+                ':amt'    => $tpAmount,
+                ':desc'   => "추천 {$level}대 보상 (TP)",
+                ':ref_id' => $orderNo,
+            ]);
+
+            $stmt = $pdo->prepare("
+                SELECT REFERRER_USER_ID
+                FROM MEMBER
+                WHERE USER_ID = ?
+            ");
+            $stmt->execute([$referrerId]);
+            $parentId = $stmt->fetchColumn();
+
+            $level++;
+        }
+
+        $maxLevel   = 20;
+        $level      = 1;
+        $rewardRate = 0.02; // 2%
+
+        $stmt = $pdo->prepare("
+            SELECT PARENT_USER_ID
+            FROM MEMBER
+            WHERE USER_ID = ?
+        ");
+        $stmt->execute([$userId]);
+        $parentId = $stmt->fetchColumn();
+
+        while ($level <= $maxLevel && $parentId) {
+
+            $rewardTotal = (int)floor($usePoint * $rewardRate);
 
             if ($rewardTotal <= 0) {
                 break;
