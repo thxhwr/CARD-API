@@ -240,7 +240,7 @@ try {
                 WHERE USER_ID = ?
             ");
             $stmt->execute([$referrerId]);
-            $parentId = $stmt->fetchColumn();
+            $referrerId = $stmt->fetchColumn();
 
             $level++;
         }
