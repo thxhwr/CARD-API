@@ -277,7 +277,7 @@ try {
             $stmt->execute([
                 ':uid'    => $parentId,
                 ':amt'    => $spAmount,
-                ':desc'   => "추천 {$level}대 보상 (SP)",
+                ':desc'   => "후원 {$level}대 보상 (SP)",
                 ':ref_id' => $orderNo,
             ]);
 
@@ -290,7 +290,7 @@ try {
             $stmt->execute([
                 ':uid'    => $parentId,
                 ':amt'    => $tpAmount,
-                ':desc'   => "추천 {$level}대 보상 (TP)",
+                ':desc'   => "후원 {$level}대 보상 (TP)",
                 ':ref_id' => $orderNo,
             ]);
 
