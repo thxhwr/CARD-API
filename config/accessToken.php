@@ -1,7 +1,4 @@
 <?php
-
-echo "test";
-exit;
 if (!defined('BASE_PATH')) {
     require_once __DIR__ . '/bootstrap.php'; // 예비용
 }
@@ -17,9 +14,19 @@ FROM API_ACCESS_TOKEN WHERE AT_STATUS = 'SUCCESS' ORDER BY AT_TIME_STAMP DESC LI
 $token = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $now = new DateTime('now');
-$expireTime = new DateTime($token['expires_at']);
 
-if ($now >= $expireTime) {
+$needRefresh = false;
+
+if (!$token) {
+    $needRefresh = true;
+} else {
+    $expireTime = new DateTime($token['expires_at']);
+    if ($now >= $expireTime) {
+        $needRefresh = true;
+    }
+}
+
+if ($needRefresh) {
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
@@ -52,7 +59,6 @@ if ($now >= $expireTime) {
 
     $accessTokenAdd = json_decode($response, true);
 
-    print_r($accessTokenAdd);
     $sql = "
     INSERT INTO API_ACCESS_TOKEN
     (
