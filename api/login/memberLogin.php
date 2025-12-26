@@ -23,7 +23,7 @@ try {
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-    CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/station/user/query',
+    CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.eximiuscard.biz/open-api/v1/station/user/query',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
@@ -34,7 +34,7 @@ try {
     CURLOPT_POSTFIELDS     => json_encode($payload),
     CURLOPT_HTTPHEADER => array(
         'access_token: '.$token['AT_ACCESS_TOKEN'],
-        'clientId: 74c01d46896d48608367e308edf9e7f1',
+        'clientId: cb6b629375e44c3ca62c621b53659179',
         'nonce: '.$nonce,
         'timestamp: '.$timestamp,
         'sign: '.$sign,
