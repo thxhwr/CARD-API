@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../config/bootstrap.php';
-
+echo "3";
 try {
     $status = trim($_POST['status'] ?? 'PENDING');
     $search = trim($_POST['search'] ?? '');
@@ -28,7 +28,7 @@ try {
         $keyword = '%' . $search . '%';
         array_push($params, $keyword, $keyword, $keyword, $keyword);
     }
-
+    echo "1";
     $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
 
     $stmt = $pdo->prepare("
@@ -48,7 +48,7 @@ try {
     ");
     $stmt->execute($params);
     $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    echo "2";
     $stmt = $pdo->prepare("
         SELECT COUNT(*)
         FROM MEMBER_APPLY
