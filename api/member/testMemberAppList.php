@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/../../../config/bootstrap.php';
-echo "3";
+
 try {
     $status = trim($_POST['status'] ?? 'PENDING');
     $search = trim($_POST['search'] ?? '');
@@ -28,7 +28,7 @@ try {
         $keyword = '%' . $search . '%';
         array_push($params, $keyword, $keyword, $keyword, $keyword);
     }
-    echo "1";
+    
     $whereSql = $where ? 'WHERE ' . implode(' AND ', $where) : '';
 
     $stmt = $pdo->prepare("
@@ -56,21 +56,7 @@ try {
     ");
     $stmt->execute($params);
     $total = (int)$stmt->fetchColumn();
-    echo "
-    SELECT
-        APPLY_ID,
-        ACCOUNT_NO,
-        NAME,
-        PHONE,
-        ADDRESS,
-        REFERRER_ACCOUNT_NO,
-        STATUS,
-        CREATED_AT
-    FROM MEMBER_APPLY
-    {$whereSql}
-    ORDER BY APPLY_ID DESC
-    LIMIT {$limit} OFFSET {$offset}
-";
+    
     jsonResponse(RES_SUCCESS, $list, $total);
 
 } catch (Throwable $e) {
