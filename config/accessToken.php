@@ -31,11 +31,11 @@ if ($now >= $expireTime) {
     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
     CURLOPT_CUSTOMREQUEST => 'POST',
     CURLOPT_POSTFIELDS =>'{
-        "clientId": "cb6b629375e44c3ca62c621b53659179",
-        "clientSecret": "MTc2Njc0MTU2Mzc3MEVYSU1JVVM1YzFiMzVhZjU3ODk0ZThjYTA5NWJjODllNjNmZjE2Nw=="
+        "clientId": "74c01d46896d48608367e308edf9e7f1",
+        "clientSecret": "MTc2NDMyNTk4MTU4MkVYSU1JVVNjYjc5Njc2YWJmOTE0MGQ4YWU4YzhiOTE2MzJlMmNkMA=="
     }',
     CURLOPT_HTTPHEADER => array(
-        'clientId: cb6b629375e44c3ca62c621b53659179',
+        'clientId: 74c01d46896d48608367e308edf9e7f1',
         'nonce: '.$nonce,
         'timestamp: '.$timestamp,
         'sign: '.$sign,
