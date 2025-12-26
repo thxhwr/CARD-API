@@ -48,7 +48,7 @@ try {
     exit('DB Connection Error');
 }
 
-const SECRET_KEY = 'MTc2Njc0MTU2Mzc3MEVYSU1JVVM1YzFiMzVhZjU3ODk0ZThjYTA5NWJjODllNjNmZjE2Nw==';
+const SECRET_KEY = 'MTc2NDMyNTk4MTU4MkVYSU1JVVNjYjc5Njc2YWJmOTE0MGQ4YWU4YzhiOTE2MzJlMmNkMA==';
 
 function generateNonce(): string
 {
@@ -75,7 +75,7 @@ function generateSign(string $data, string $clientSecret): string
     return strtoupper(md5($data . $clientSecret));
 }
 
-$clientId  = 'cb6b629375e44c3ca62c621b53659179';
+$clientId  = '74c01d46896d48608367e308edf9e7f1';
 $timestamp = getTimestamp();
 $nonce     = generateNonce();
 $data = sprintf('clientId=%s&nonce=%s&timestamp=%s',$clientId,$nonce,$timestamp);
