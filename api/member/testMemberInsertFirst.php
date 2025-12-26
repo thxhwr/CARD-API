@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
 $referrerUserId = null;
-$applyId = (int)($_POST['applyId'] ?? 1);
+$applyId = (int)($_POST['applyId'] ?? 0);
 
 if ($applyId <= 0) {
     jsonResponse(RES_INVALID_PARAM, [], 400);
