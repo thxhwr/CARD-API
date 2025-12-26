@@ -50,6 +50,7 @@ if ($now >= $expireTime) {
 
     $accessTokenAdd = json_decode($response, true);
 
+    print_r($accessTokenAdd);
     $sql = "
     INSERT INTO API_ACCESS_TOKEN
     (
