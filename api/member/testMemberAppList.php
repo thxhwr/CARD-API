@@ -78,3 +78,5 @@ try {
         'error' => $e->getMessage()
     ], 500);
 }
+
+?>
