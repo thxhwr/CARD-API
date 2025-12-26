@@ -1,10 +1,12 @@
 <?php
+
+echo "test";
+exit;
 if (!defined('BASE_PATH')) {
     require_once __DIR__ . '/bootstrap.php'; // 예비용
 }
 // require_once BASE_PATH . '/config/lib.php';
 
-echo "test";
 $stmt = $pdo->query("
 SELECT CONVERT_TZ(
     FROM_UNIXTIME(AT_EXPIRES_IN / 1000),'+00:00','+09:00') AS expires_at, 
