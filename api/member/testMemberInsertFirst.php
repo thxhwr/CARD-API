@@ -3,61 +3,44 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
 $referrerUserId = null;
+$applyId = (int)($_POST['applyId'] ?? 0);
 
-$referrerAccountNo = trim($_POST['referrerAccountNo'] ?? '');
-$userId = trim($_POST['userId'] ?? '');
-$accountNo = trim($_POST['accountNo'] ?? '');
-$name    = trim($_POST['name'] ?? '');
-$phone   = trim($_POST['phone'] ?? '');
-$address = trim($_POST['address'] ?? '');
-
-// $accountNo = 'test' . time() . '@test.com';
-
-if ($userId === '') {
-    jsonResponse(RES_ACCOUNT_REQUIRED, [], 400);
+if ($applyId <= 0) {
+    jsonResponse(RES_INVALID_PARAM, [], 400);
 }
 
-if ($accountNo === '') {
-    jsonResponse(RES_ACCOUNT_REQUIRED, [], 400);
-}
+$pdo->beginTransaction();
 
-$accountNo = strtolower($accountNo);
-
-if (!filter_var($accountNo, FILTER_VALIDATE_EMAIL)) {
-    jsonResponse(RES_INVALID_EMAIL, [], 400);
-}
-
+// 1. 신청 조회
 $stmt = $pdo->prepare("
-    SELECT 1
-    FROM MEMBER
-    WHERE ACCOUNT_NO = ?
-    LIMIT 1
+    SELECT *
+    FROM MEMBER_APPLY
+    WHERE APPLY_ID = ?
+    FOR UPDATE
 ");
-$stmt->execute([$accountNo]);
+$stmt->execute([$applyId]);
+$apply = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if ($stmt->fetchColumn()) {
-    jsonResponse(RES_ACCOUNT_DUPLICATED, [], 409);
+if (!$apply) {
+    jsonResponse(RES_NOT_FOUND, [], 404);
 }
 
-if ($referrerAccountNo === '') {
-    jsonResponse(RES_REFERRER_REQUIRED, [], 400);
+if ($apply['STATUS'] !== 'PENDING') {
+    jsonResponse(RES_ALREADY_PROCESSED, [], 409);
 }
 
-// 2. 추천인 형식 검사
-if (!filter_var($referrerAccountNo, FILTER_VALIDATE_EMAIL)) {
-    jsonResponse(RES_INVALID_REFERRER, [], 400);
-}
-
-// 3. 추천인 존재 검사
+// 2. 추천인 확인
 $stmt = $pdo->prepare("
     SELECT USER_ID
     FROM MEMBER
     WHERE ACCOUNT_NO = ?
-    LIMIT 1
 ");
-$stmt->execute([$referrerAccountNo]);
-
+$stmt->execute([$apply['REFERRER_ACCOUNT_NO']]);
 $referrerUserId = $stmt->fetchColumn();
+
+if (!$referrerUserId) {
+    jsonResponse(RES_REFERRER_NOT_FOUND, [], 404);
+}
 
 if (!$referrerUserId) {
     jsonResponse(RES_REFERRER_NOT_FOUND, [], 404);
@@ -67,19 +50,19 @@ $pdo->beginTransaction();
 
 try {
 
-    if ($name === '' || $phone === '' || $address === '') {
+    if ($apply['NAME'] === '' || $apply['PHONE'] === '' || $apply['ADDRESS'] === '') {
         jsonResponse(RES_INVALID_PARAM, [], 400);
     }
 
-    if (!isValidName($name)) {
+    if (!isValidName($apply['NAME'])) {
         jsonResponse(RES_INVALID_NAME, [], 400);
     }
 
-    if (!isValidPhone($phone)) {
+    if (!isValidPhone($apply['PHONE'])) {
         jsonResponse(RES_INVALID_PHONE, [], 400);
     }
 
-    if (!isValidAddress($address)) {
+    if (!isValidAddress($apply['ADDRESS'])) {
         jsonResponse(RES_INVALID_ADDRESS, [], 400);
     }
 
@@ -130,13 +113,13 @@ try {
         $stmt->execute([
             ':user_id'           => $userId,
             ':referrer_user_id'  => $referrerUserId,
-            ':account_no'        => $accountNo,
+            ':account_no'        => $apply['ACCOUNT_NO'],
             ':dept'              => $pos['dept'],
             ':dept_no'           => $pos['dept_no'],
             ':parent_user_id'    => $pos['parent_user_id'],
-            ':name'              => $name,
-            ':phone'             => $phone,
-            ':address'           => $address,
+            ':name'              => $apply['NAME'],
+            ':phone'             => $apply['PHONE'],
+            ':address'           => $apply['ADDRESS'],
         ]);
 
         $maxLevel = 3;
@@ -277,6 +260,13 @@ try {
 
             $level++;
         }
+
+        $stmt = $pdo->prepare("
+            UPDATE MEMBER_APPLY
+            SET STATUS = 'APPROVED'
+            WHERE APPLY_ID = ?
+        ");
+        $stmt->execute([$applyId]);
 
         $pdo->commit();
 
