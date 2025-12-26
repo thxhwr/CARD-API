@@ -9,8 +9,6 @@ if ($applyId <= 0) {
     jsonResponse(RES_INVALID_PARAM, [], 400);
 }
 
-$pdo->beginTransaction();
-
 // 1. 신청 조회
 $stmt = $pdo->prepare("
     SELECT *
