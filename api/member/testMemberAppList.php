@@ -48,7 +48,7 @@ try {
     ");
     $stmt->execute($params);
     $list = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo "2";
+    
     $stmt = $pdo->prepare("
         SELECT COUNT(*)
         FROM MEMBER_APPLY
