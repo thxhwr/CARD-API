@@ -125,7 +125,7 @@ try {
     // $status = $payout['status'] ?? '';
     // curl_close($curl);
 
-    $status === 'SUCCESS';
+    $status = 'SUCCESS';
     if ($status === 'SUCCESS') {
         $pos = assignDeptAndParent($pdo);
         $userId = (int)$pdo->query("SELECT IFNULL(MAX(USER_ID), 0) + 1 FROM MEMBER")
