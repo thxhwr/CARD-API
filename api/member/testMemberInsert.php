@@ -10,7 +10,7 @@ $accountNo = trim($_POST['accountNo'] ?? 'hwrft'.random_int(1000, 9999).'@test.c
 $name    = trim($_POST['name'] ?? 'hwrft');
 $phone   = trim($_POST['phone'] ?? '010'.random_int(1000, 9999).random_int(1000, 9999));
 $address = trim($_POST['address'] ?? '경기도 878');
-
+exit;
 // $accountNo = 'test' . time() . '@test.com';
 
 // if ($userId === '') {
