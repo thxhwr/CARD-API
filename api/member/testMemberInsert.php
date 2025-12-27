@@ -6,9 +6,9 @@ $referrerUserId = null;
 
 $referrerAccountNo = trim($_POST['referrerAccountNo'] ?? 'thx.manager@gmail.com');
 // $userId = trim($_POST['userId'] ?? '');
-$accountNo = trim($_POST['accountNo'] ?? 'hwrft'.random(1000, 9999).'@test.com');
+$accountNo = trim($_POST['accountNo'] ?? 'hwrft1@test.com');
 $name    = trim($_POST['name'] ?? 'hwrft');
-$phone   = trim($_POST['phone'] ?? '010'.random(1000, 9999).random(1000, 9999));
+$phone   = trim($_POST['phone'] ?? '01000000001');
 $address = trim($_POST['address'] ?? '경기도 878');
 
 // $accountNo = 'test' . time() . '@test.com';
