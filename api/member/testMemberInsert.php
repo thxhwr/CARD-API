@@ -121,8 +121,8 @@ try {
 
     // $response = curl_exec($curl);
 
-    $payout = json_decode($response, true);
-    $status = $payout['status'] ?? '';
+    // $payout = json_decode($response, true);
+    // $status = $payout['status'] ?? '';
     curl_close($curl);
 
     if ($status === 'SUCCESS') {
