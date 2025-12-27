@@ -123,7 +123,7 @@ try {
 
     // $payout = json_decode($response, true);
     // $status = $payout['status'] ?? '';
-    curl_close($curl);
+    // curl_close($curl);
 
     if ($status === 'SUCCESS') {
         $pos = assignDeptAndParent($pdo);
