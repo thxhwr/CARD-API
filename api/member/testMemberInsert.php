@@ -4,18 +4,18 @@ require_once BASE_PATH . '/config/accessToken.php';
 
 $referrerUserId = null;
 
-$referrerAccountNo = trim($_POST['referrerAccountNo'] ?? '');
-$userId = trim($_POST['userId'] ?? '');
-$accountNo = trim($_POST['accountNo'] ?? '');
-$name    = trim($_POST['name'] ?? '');
-$phone   = trim($_POST['phone'] ?? '');
-$address = trim($_POST['address'] ?? '');
+$referrerAccountNo = trim($_POST['referrerAccountNo'] ?? 'thx.manager@gmail.com');
+// $userId = trim($_POST['userId'] ?? '');
+$accountNo = trim($_POST['accountNo'] ?? 'hwrft'.random_int(1000, 9999).'@test.com');
+$name    = trim($_POST['name'] ?? 'hwrft');
+$phone   = trim($_POST['phone'] ?? '010'.random_int(1000, 9999).random_int(1000, 9999));
+$address = trim($_POST['address'] ?? '경기도 878');
 
 // $accountNo = 'test' . time() . '@test.com';
 
-if ($userId === '') {
-    jsonResponse(RES_ACCOUNT_REQUIRED, [], 400);
-}
+// if ($userId === '') {
+//     jsonResponse(RES_ACCOUNT_REQUIRED, [], 400);
+// }
 
 if ($accountNo === '') {
     jsonResponse(RES_ACCOUNT_REQUIRED, [], 400);
@@ -96,30 +96,30 @@ try {
         'remark'  => '오프라인 카드 신청',
     ];
 
-    $curl = curl_init();
+    // $curl = curl_init();
 
-    curl_setopt_array($curl, array(
-    CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/station/user/payment',
-    CURLOPT_RETURNTRANSFER => true,
-    CURLOPT_ENCODING => '',
-    CURLOPT_MAXREDIRS => 10,
-    CURLOPT_TIMEOUT => 0,
-    CURLOPT_FOLLOWLOCATION => true,
-    CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-    CURLOPT_CUSTOMREQUEST => 'POST',
-    CURLOPT_POSTFIELDS =>json_encode($postData, JSON_UNESCAPED_UNICODE),
-    CURLOPT_HTTPHEADER => array(
-        'access_token: '.$token['AT_ACCESS_TOKEN'],
-        'clientId: 74c01d46896d48608367e308edf9e7f1',
-        'nonce: '.$nonce,
-        'timestamp: '.$timestamp,
-        'sign: '.$sign,
-        'Accept-Language: ko-KR',
-        'Content-Type: application/json'
-    ),
-    ));
+    // curl_setopt_array($curl, array(
+    // CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.siweipay.com/open-api/v1/station/user/payment',
+    // CURLOPT_RETURNTRANSFER => true,
+    // CURLOPT_ENCODING => '',
+    // CURLOPT_MAXREDIRS => 10,
+    // CURLOPT_TIMEOUT => 0,
+    // CURLOPT_FOLLOWLOCATION => true,
+    // CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+    // CURLOPT_CUSTOMREQUEST => 'POST',
+    // CURLOPT_POSTFIELDS =>json_encode($postData, JSON_UNESCAPED_UNICODE),
+    // CURLOPT_HTTPHEADER => array(
+    //     'access_token: '.$token['AT_ACCESS_TOKEN'],
+    //     'clientId: 74c01d46896d48608367e308edf9e7f1',
+    //     'nonce: '.$nonce,
+    //     'timestamp: '.$timestamp,
+    //     'sign: '.$sign,
+    //     'Accept-Language: ko-KR',
+    //     'Content-Type: application/json'
+    // ),
+    // ));
 
-    $response = curl_exec($curl);
+    // $response = curl_exec($curl);
 
     $payout = json_decode($response, true);
     $status = $payout['status'] ?? '';
