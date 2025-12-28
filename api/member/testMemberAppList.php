@@ -39,7 +39,7 @@ try {
             A.PHONE,
             A.ADDRESS,
             A.REFERRER_ACCOUNT_NO,
-            R.USER_ID   AS REFERRER_USER_ID,
+            R.ACCOUNT_NO   AS REFERRER_USER_ID,
             R.NAME      AS REFERRER_NAME,
             A.STATUS,
             A.CREATED_AT
