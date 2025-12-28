@@ -33,17 +33,21 @@ try {
 
     $stmt = $pdo->prepare("
         SELECT
-            APPLY_ID,
-            ACCOUNT_NO,
-            NAME,
-            PHONE,
-            ADDRESS,
-            REFERRER_ACCOUNT_NO,
-            STATUS,
-            CREATED_AT
-        FROM MEMBER_APPLY
+            A.APPLY_ID,
+            A.ACCOUNT_NO,
+            A.NAME,
+            A.PHONE,
+            A.ADDRESS,
+            A.REFERRER_ACCOUNT_NO,
+            R.USER_ID   AS REFERRER_USER_ID,
+            R.NAME      AS REFERRER_NAME,
+            A.STATUS,
+            A.CREATED_AT
+        FROM MEMBER_APPLY A
+        LEFT JOIN MEMBER R
+            ON A.REFERRER_ACCOUNT_NO = R.ACCOUNT_NO
         {$whereSql}
-        ORDER BY APPLY_ID DESC
+        ORDER BY A.APPLY_ID DESC
         LIMIT {$limit} OFFSET {$offset}
     ");
     $stmt->execute($params);
