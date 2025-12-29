@@ -69,8 +69,8 @@ try {
 
     if(md5($password) == $memberInfo['data'][0]['password']){
         $stmt = $pdo->prepare("
-            SELECT USER_ID
-            FROM MEMBER
+            SELECT APPLY_ID
+            FROM MEMBER_APPLY
             WHERE ACCOUNT_NO = ?
             LIMIT 1
         ");
