@@ -19,10 +19,10 @@ try {
     if ($search !== '') {
         $where[] = "
             (
-                ACCOUNT_NO LIKE ?
-                OR NAME LIKE ?
-                OR PHONE LIKE ?
-                OR REFERRER_ACCOUNT_NO LIKE ?
+                A.ACCOUNT_NO LIKE ?
+                OR A.NAME LIKE ?
+                OR A.PHONE LIKE ?
+                OR A.REFERRER_ACCOUNT_NO LIKE ?
             )
         ";
         $keyword = '%' . $search . '%';
