@@ -68,6 +68,15 @@ try {
     }
 
     if(md5($password) == $memberInfo['data'][0]['password']){
+        $stmt = $pdo->prepare("
+            SELECT USER_ID
+            FROM MEMBER
+            WHERE ACCOUNT_NO = ?
+            LIMIT 1
+        ");
+        $stmt->execute([$memberInfo['data'][0]['accountNo']]);
+        $localUserId = $stmt->fetchColumn();
+
         insertLoginLog([
             'user_id'      => $memberInfo['data'][0]['userId'],
             'account_no'   => $memberInfo['data'][0]['accountNo'],
@@ -77,6 +86,7 @@ try {
         jsonResponse(RES_SUCCESS, [
             'accountNo'    => $memberInfo['data'][0]['accountNo'],
             'userId' => $memberInfo['data'][0]['userId'],
+            'localUserId'  => $localUserId ? (int)$localUserId : null,
             'balance' => $memberInfo['data'][0]['balance'],
             'status' => $memberInfo['data'][0]['status']
         ]);
