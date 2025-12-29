@@ -55,7 +55,9 @@ try {
     
     $stmt = $pdo->prepare("
         SELECT COUNT(*)
-        FROM MEMBER_APPLY
+        FROM MEMBER_APPLY A
+        LEFT JOIN MEMBER R
+            ON A.REFERRER_ACCOUNT_NO = R.ACCOUNT_NO
         {$whereSql}
     ");
     $stmt->execute($params);
