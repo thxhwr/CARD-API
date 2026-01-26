@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 try {
     $period = strtolower(trim($_POST['period'] ?? 'day'));                
     $baseDate = trim($_POST['baseDate'] ?? '');                           
-    $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'Y'));
+    $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'N'));
 
     if (!in_array($period, ['day','week','month'], true)) {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'period'], 400);
@@ -56,7 +56,7 @@ try {
     $params[] = $end->format('Y-m-d H:i:s');
 
     // 테스트유저 제외 토글
-    if ($excludeTestUsers === 'N') {
+    if ($excludeTestUsers === 'Y') {
         $where[] = "USER_ID NOT BETWEEN 1 AND 15";
     }
 
