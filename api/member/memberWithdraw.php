@@ -5,10 +5,10 @@ require_once BASE_PATH . '/config/accessToken.php';
 try {
     $accountNo   = trim($_POST['accountNo'] ?? 'youbr919@naver.com');
     $accountId   = trim($_POST['accountId'] ?? '2222578');
-    $amount      = (int)($_POST['amount'] ?? -1);
+    $amount      = (int)($_POST['amount'] ?? 0);
     $description = trim($_POST['description'] ?? 'TP 출금');
 
-    if ($accountNo === '' || $accountId === '' || $amount === '') {
+    if ($accountNo === '' || $accountId === '' || $amount <= 0) {
         jsonResponse(RES_INVALID_PARAM, [], 400);
     }
 
@@ -51,7 +51,7 @@ try {
 
     $postData = [
         'transferUserId'  => $accountId,
-        'amount'  => '-1',
+        'amount'  => $amount,
         'remark'  => 'Thxdeal 포인트 변환',
         'orderNo' => $orderNo,
     ];
