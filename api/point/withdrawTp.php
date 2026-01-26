@@ -41,8 +41,7 @@ try {
             COUNT(*) AS cnt,
             COALESCE(SUM(AMOUNT), 0) AS totalAmount
         FROM POINT_LOG
-        WHERE USER_ID NOT BETWEEN 1 AND 15
-          AND ACTION_TYPE = ?
+        WHERE  ACTION_TYPE = ?
           AND DESCRIPTION = ?
           AND CREATED_AT >= ?
           AND CREATED_AT <= ?
