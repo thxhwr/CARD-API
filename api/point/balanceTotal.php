@@ -76,7 +76,7 @@ try {
         'filters' => [
             'actionType' => $actionType ?: null,
             'typeCodes'  => $typeCodes,
-            'excludedUserIdRange' => '1-15',
+            'excludedUserIdRange' => '14-15',
         ],
     ]);
 
