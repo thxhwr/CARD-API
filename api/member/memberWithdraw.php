@@ -3,9 +3,9 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
 try {
-    $accountNo   = trim($_POST['accountNo'] ?? '');
-    $accountId   = trim($_POST['accountId'] ?? '');
-    $amount      = (int)($_POST['amount'] ?? 0);
+    $accountNo   = trim($_POST['accountNo'] ?? 'youbr919@naver.com');
+    $accountId   = trim($_POST['accountId'] ?? '2222578');
+    $amount      = (int)($_POST['amount'] ?? 10);
     $description = trim($_POST['description'] ?? 'TP 출금');
 
     if ($accountNo === '' || $accountId === '' || $amount <= 0) {
