@@ -51,7 +51,7 @@ try {
 
     $postData = [
         'transferUserId'  => $accountId,
-        'amount'  => $amount,
+        'amount'  => '-1',
         'remark'  => 'Thxdeal 포인트 변환',
         'orderNo' => $orderNo,
     ];
