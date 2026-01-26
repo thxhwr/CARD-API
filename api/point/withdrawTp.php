@@ -4,7 +4,7 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 try {
     $period = strtolower(trim($_POST['period'] ?? 'day'));               
     $baseDate = trim($_POST['baseDate'] ?? '');                           
-    $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'Y')); 
+    $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'N')); 
 
     if (!in_array($period, ['day','week','month'], true)) {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'period'], 400);
