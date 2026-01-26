@@ -3,9 +3,7 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 
 try {
 
-    $actionType = strtoupper(trim($_POST['actionType'] ?? '')); // IN / OUT / ''(전체)
-    $fromDate   = trim($_POST['fromDate'] ?? '');              // 예: 2025-01-01
-    $toDate     = trim($_POST['toDate'] ?? '');                // 예: 2025-12-31
+    $actionType = strtoupper(trim($_POST['actionType'] ?? '')); // IN / OUT / ''(전체)   
     $typeCodes  = $_POST['typeCodes'] ?? ['SP','TP','LP'];     // 배열 또는 미전달
 
 
@@ -24,14 +22,6 @@ try {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'actionType'], 400);
     }
 
-    // 날짜 검증(간단)
-    if ($fromDate !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fromDate)) {
-        jsonResponse(RES_INVALID_PARAM, ['field' => 'fromDate'], 400);
-    }
-    if ($toDate !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $toDate)) {
-        jsonResponse(RES_INVALID_PARAM, ['field' => 'toDate'], 400);
-    }
-
     // IN절 placeholder 생성
     $inPlaceholders = implode(',', array_fill(0, count($typeCodes), '?'));
 
@@ -44,15 +34,7 @@ try {
     if ($actionType !== '') {
         $where[] = "ACTION_TYPE = ?";
         $params[] = $actionType;
-    }
-    if ($fromDate !== '') {
-        $where[] = "CREATED_AT >= ?";
-        $params[] = $fromDate . " 00:00:00";
-    }
-    if ($toDate !== '') {
-        $where[] = "CREATED_AT <= ?";
-        $params[] = $toDate . " 23:59:59";
-    }
+    }  
 
     $sql = "
         SELECT
@@ -83,9 +65,7 @@ try {
     jsonResponse(RES_SUCCESS, [
         'total' => $result,
         'filters' => [
-            'actionType' => $actionType ?: null,
-            'fromDate' => $fromDate ?: null,
-            'toDate' => $toDate ?: null,
+            'actionType' => $actionType ?: null,           
             'typeCodes' => $typeCodes,
         ],
     ]);
