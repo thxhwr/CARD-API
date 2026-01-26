@@ -50,7 +50,7 @@ try {
     $orderNo = date('YmdHis') . '-' . random_int(1000, 9999);
 
     $postData = [
-        'userId'  => $accountId,
+        'transferUserId'  => $accountId,
         'orderNo' => $orderNo,
         'amount'  => $amount,
         'remark'  => 'Thxdeal 포인트 변환',
@@ -59,7 +59,7 @@ try {
     $curl = curl_init();
 
     curl_setopt_array($curl, array(
-    CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.eximiuscard.biz/open-api/v1/station/user/payment',
+    CURLOPT_URL => 'https://eximius-vcc-pay-customer-service.eximiuscard.biz/open-api/v1/user/adjustment',
     CURLOPT_RETURNTRANSFER => true,
     CURLOPT_ENCODING => '',
     CURLOPT_MAXREDIRS => 10,
