@@ -2,9 +2,9 @@
 require_once __DIR__ . '/../../config/bootstrap.php';
 
 try {
-    $period = strtolower(trim($_POST['period'] ?? 'day'));                 // day|week|month
-    $baseDate = trim($_POST['baseDate'] ?? '');                             // YYYY-MM-DD optional
-    $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'N')); // Y|N
+    $period = strtolower(trim($_POST['period'] ?? 'day'));                
+    $baseDate = trim($_POST['baseDate'] ?? '');                           
+    $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'Y'));
 
     if (!in_array($period, ['day','week','month'], true)) {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'period'], 400);
@@ -16,7 +16,7 @@ try {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'excludeTestUsers'], 400);
     }
 
-    // 기간 계산 (KST)
+
     $tz = new DateTimeZone('Asia/Seoul');
     $base = $baseDate ? new DateTime($baseDate, $tz) : new DateTime('now', $tz);
 
@@ -38,14 +38,14 @@ try {
     $where = [];
     $params = [];
 
-    // ✅ 고정: TP / OUT / TP출금(공백/특수공백 대비 LIKE)
+    
     $where[] = "TYPE_CODE = ?";
     $params[] = "TP";
 
     $where[] = "ACTION_TYPE = ?";
     $params[] = "OUT";
 
-    // 'TP출금', 'TP 출금', 'TP   출금', 특수공백 포함 케이스까지 웬만하면 다 잡힘
+   
     $where[] = "DESCRIPTION LIKE ?";
     $params[] = "%TP%출금%";
 
@@ -55,8 +55,8 @@ try {
     $where[] = "CREATED_AT <= ?";
     $params[] = $end->format('Y-m-d H:i:s');
 
-    // ✅ 테스트유저 제외 토글
-    if ($excludeTestUsers === 'Y') {
+    // 테스트유저 제외 토글
+    if ($excludeTestUsers === 'N') {
         $where[] = "USER_ID NOT BETWEEN 1 AND 15";
     }
 
