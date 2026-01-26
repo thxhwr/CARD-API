@@ -2,9 +2,9 @@
 require_once __DIR__ . '/../../config/bootstrap.php';
 
 try {
-    $period = strtolower(trim($_POST['period'] ?? 'day'));                
-    $baseDate = trim($_POST['baseDate'] ?? '');                           
-    $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'N'));
+    $period = strtolower(trim($_POST['period'] ?? 'day'));                 
+    $baseDate = trim($_POST['baseDate'] ?? '');                            
+    $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'N')); 
 
     if (!in_array($period, ['day','week','month'], true)) {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'period'], 400);
@@ -16,36 +16,31 @@ try {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'excludeTestUsers'], 400);
     }
 
-
     $tz = new DateTimeZone('Asia/Seoul');
     $base = $baseDate ? new DateTime($baseDate, $tz) : new DateTime('now', $tz);
 
+    $end = clone $base;
+    $end->setTime(23, 59, 59);
+
     $start = clone $base;
-    $end   = clone $base;
 
     if ($period === 'day') {
         $start->setTime(0, 0, 0);
-        $end->setTime(23, 59, 59);
     } elseif ($period === 'week') {
-        $dow = (int)$start->format('N'); // 월=1
-        $start->modify('-' . ($dow - 1) . ' days')->setTime(0, 0, 0);
-        $end = (clone $start)->modify('+6 days')->setTime(23, 59, 59);
-    } else { // month
-        $start->modify('first day of this month')->setTime(0, 0, 0);
-        $end->modify('last day of this month')->setTime(23, 59, 59);
+        $start->modify('-6 days')->setTime(0, 0, 0);
+    } else { 
+        $start->modify('-1 month')->setTime(0, 0, 0);
     }
 
     $where = [];
     $params = [];
 
-    
     $where[] = "TYPE_CODE = ?";
     $params[] = "TP";
 
     $where[] = "ACTION_TYPE = ?";
     $params[] = "OUT";
 
-   
     $where[] = "DESCRIPTION LIKE ?";
     $params[] = "%TP%출금%";
 
@@ -55,7 +50,6 @@ try {
     $where[] = "CREATED_AT <= ?";
     $params[] = $end->format('Y-m-d H:i:s');
 
-    // 테스트유저 제외 토글
     if ($excludeTestUsers === 'Y') {
         $where[] = "USER_ID NOT BETWEEN 1 AND 15";
     }
