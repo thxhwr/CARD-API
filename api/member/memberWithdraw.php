@@ -5,7 +5,7 @@ require_once BASE_PATH . '/config/accessToken.php';
 try {
     $accountNo   = trim($_POST['accountNo'] ?? 'youbr919@naver.com');
     $accountId   = trim($_POST['accountId'] ?? '2222578');
-    $amount      = (int)($_POST['amount'] ?? 0);
+    $amount      = (int)($_POST['amount'] ?? 1);
     $description = trim($_POST['description'] ?? 'TP 출금');
 
     if ($accountNo === '' || $accountId === '' || $amount <= 0) {
