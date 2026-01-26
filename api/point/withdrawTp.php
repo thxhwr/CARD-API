@@ -2,24 +2,21 @@
 require_once __DIR__ . '/../../config/bootstrap.php';
 
 try {
-
-    $period = strtolower(trim($_POST['period'] ?? 'day'));          
-    $baseDate = trim($_POST['baseDate'] ?? '');                     
+    $period = strtolower(trim($_POST['period'] ?? 'day'));               
+    $baseDate = trim($_POST['baseDate'] ?? '');                           
     $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'Y')); 
 
-    if (!in_array($period, ['day', 'week', 'month'], true)) {
+    if (!in_array($period, ['day','week','month'], true)) {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'period'], 400);
     }
-
     if ($baseDate !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $baseDate)) {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'baseDate'], 400);
     }
-
-    if (!in_array($excludeTestUsers, ['Y', 'N'], true)) {
+    if (!in_array($excludeTestUsers, ['Y','N'], true)) {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'excludeTestUsers'], 400);
     }
 
-  
+
     $tz = new DateTimeZone('Asia/Seoul');
     $base = $baseDate ? new DateTime($baseDate, $tz) : new DateTime('now', $tz);
 
@@ -30,28 +27,24 @@ try {
         $start->setTime(0, 0, 0);
         $end->setTime(23, 59, 59);
     } elseif ($period === 'week') {
-      
-        $dow = (int)$start->format('N');
+        $dow = (int)$start->format('N'); // 월=1
         $start->modify('-' . ($dow - 1) . ' days')->setTime(0, 0, 0);
         $end = (clone $start)->modify('+6 days')->setTime(23, 59, 59);
-    } else {
+    } else { // month
         $start->modify('first day of this month')->setTime(0, 0, 0);
         $end->modify('last day of this month')->setTime(23, 59, 59);
     }
-
- 
-    $description = 'TP출금';
-    $actionType  = 'OUT';
 
     
     $where = [];
     $params = [];
 
     $where[] = "ACTION_TYPE = ?";
-    $params[] = $actionType;
+    $params[] = 'OUT';
 
-    $where[] = "DESCRIPTION = ?";
-    $params[] = $description;
+   
+    $where[] = "REPLACE(DESCRIPTION, ' ', '') = ?";
+    $params[] = 'TP출금';
 
     $where[] = "CREATED_AT >= ?";
     $params[] = $start->format('Y-m-d H:i:s');
@@ -59,7 +52,7 @@ try {
     $where[] = "CREATED_AT <= ?";
     $params[] = $end->format('Y-m-d H:i:s');
 
-   
+    
     if ($excludeTestUsers === 'Y') {
         $where[] = "USER_ID NOT BETWEEN 1 AND 15";
     }
@@ -88,9 +81,9 @@ try {
             'end' => $end->format('Y-m-d H:i:s'),
         ],
         'filters' => [
-            'actionType' => $actionType,
-            'description' => $description,
             'excludeTestUsers' => $excludeTestUsers,
+            'actionType' => 'OUT',
+            'descriptionNormalized' => 'TP출금 (공백무시)',
         ],
     ]);
 
