@@ -30,7 +30,7 @@ try {
     $params = [];
 
     
-    $where[] = "USER_ID NOT BETWEEN 14 AND 15";
+    $where[] = "USER_ID NOT BETWEEN 1 AND 15";
 
 
     $inPlaceholders = implode(',', array_fill(0, count($typeCodes), '?'));
@@ -76,7 +76,7 @@ try {
         'filters' => [
             'actionType' => $actionType ?: null,
             'typeCodes'  => $typeCodes,
-            'excludedUserIdRange' => '14-15',
+            'excludedUserIdRange' => '1-15',
         ],
     ]);
 
