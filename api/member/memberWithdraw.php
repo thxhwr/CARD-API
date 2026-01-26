@@ -51,9 +51,9 @@ try {
 
     $postData = [
         'transferUserId'  => $accountId,
-        'orderNo' => $orderNo,
         'amount'  => $amount,
         'remark'  => 'Thxdeal 포인트 변환',
+        'orderNo' => $orderNo,
     ];
 
     $curl = curl_init();
