@@ -5,7 +5,7 @@ try {
 
     $period = strtolower(trim($_POST['period'] ?? 'day'));          
     $baseDate = trim($_POST['baseDate'] ?? '');                     
-    $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'N')); 
+    $excludeTestUsers = strtoupper(trim($_POST['excludeTestUsers'] ?? 'Y')); 
 
     if (!in_array($period, ['day', 'week', 'month'], true)) {
         jsonResponse(RES_INVALID_PARAM, ['field' => 'period'], 400);
