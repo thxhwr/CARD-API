@@ -8,7 +8,7 @@ try {
     $amount      = (int)($_POST['amount'] ?? -1);
     $description = trim($_POST['description'] ?? 'TP 출금');
 
-    if ($accountNo === '' || $accountId === '' || $amount <= 0) {
+    if ($accountNo === '' || $accountId === '' || $amount === '') {
         jsonResponse(RES_INVALID_PARAM, [], 400);
     }
 
