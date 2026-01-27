@@ -2,14 +2,12 @@
 require_once __DIR__ . '/../../config/bootstrap.php';
 
 try {
-    // 프론트에서 보내는 값: accountNo (추천한 회원의 계정번호)
     $accountNo = strtolower(trim($_POST['accountNo'] ?? ''));
 
     if ($accountNo === '') {
         jsonResponse(RES_ACCOUNT_REQUIRED, [], 400);
     }
 
-    // 1) 대상 회원(본인) 조회
     $stmt = $pdo->prepare("
         SELECT
             REFERRER_ACCOUNT_NO,
@@ -32,7 +30,7 @@ try {
         jsonResponse(RES_USER_NOT_FOUND, [], 404);
     }
 
-    // 2) 하위(직추천): 내가 추천한 회원들
+  
     $stmt = $pdo->prepare("
         SELECT
             REFERRER_ACCOUNT_NO,
@@ -67,16 +65,16 @@ try {
         ];
     }
 
-    // 3) 상위(최대 3대): 나를 추천한 회원들
+ 
     $upline = [];
-    $visited = []; // 순환 추천 방지
+    $visited = []; 
 
     $currentAccountNo = $accountNo;
     $currentReferrerAccountNo = strtolower(trim($target['REFERRER_ACCOUNT_NO'] ?? ''));
 
     for ($lvl = 1; $lvl <= 3; $lvl++) {
         if ($currentReferrerAccountNo === '') break;
-        if (isset($visited[$currentReferrerAccountNo])) break; // 혹시 데이터 꼬였을 때 무한루프 방지
+        if (isset($visited[$currentReferrerAccountNo])) break; 
         $visited[$currentReferrerAccountNo] = true;
 
         $stmt = $pdo->prepare("
@@ -112,12 +110,12 @@ try {
             'updatedAt'        => $ref['UPDATED_AT'],
         ];
 
-        // 다음 상위로 이동
+  
         $currentAccountNo = $ref['ACCOUNT_NO'];
         $currentReferrerAccountNo = strtolower(trim($ref['REFERRER_ACCOUNT_NO'] ?? ''));
     }
 
-    // 4) 응답
+ 
     jsonResponse(RES_SUCCESS, [
         'target' => [
             'referrerAccountNo'=> $target['REFERRER_ACCOUNT_NO'],
