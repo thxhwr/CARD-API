@@ -4,7 +4,7 @@ require_once BASE_PATH . '/config/accessToken.php';
 
 try {
     $memberId = "ksw9310@nate.com";
-    $password = $_POST['memberPw'] ?? '';
+    $password = "123456";
 
     if (empty($memberId) || empty($password)) {
         jsonResponse(RES_API_RESPONSE_ERROR, [], 400);
