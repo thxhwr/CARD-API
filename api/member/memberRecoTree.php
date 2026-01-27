@@ -7,7 +7,7 @@ try {
         jsonResponse(RES_ACCOUNT_REQUIRED, [], 400);
     }
 
-    // ✅ target: 일단 MEMBER_APPLY에서 계정 존재 확인용(한 줄)
+
     $stmt = $pdo->prepare("
         SELECT
             REFERRER_ACCOUNT_NO,
@@ -30,11 +30,7 @@ try {
         jsonResponse(RES_USER_NOT_FOUND, [], 404);
     }
 
-    // =========================
-    // ✅ (1) 하위: accountNo(추천인)가 추천한 회원들
-    // 네 정의: ACCOUNT_NO(추천인) -> REFERRER_ACCOUNT_NO(피추천인)
-    // 그러므로 "내가 추천한 사람들" = WHERE ACCOUNT_NO = 내 accountNo
-    // =========================
+
     $stmt = $pdo->prepare("
         SELECT
             REFERRER_ACCOUNT_NO,
@@ -55,11 +51,11 @@ try {
 
     $downline = [];
     foreach ($downRows as $row) {
-        // row에서 실제 하위 회원 계정은 REFERRER_ACCOUNT_NO (네 정의)
+       
         $downline[] = [
             'level'             => 1,
-            'referrerAccountNo' => $row['ACCOUNT_NO'],           // 추천인(나)
-            'accountNo'         => $row['REFERRER_ACCOUNT_NO'],  // 피추천인(하위)
+            'referrerAccountNo' => $row['ACCOUNT_NO'],          
+            'accountNo'         => $row['REFERRER_ACCOUNT_NO'],  
             'name'              => $row['NAME'],
             'phone'             => $row['PHONE'],
             'address'           => $row['ADDRESS'],
@@ -70,10 +66,7 @@ try {
         ];
     }
 
-    // =========================
-    // ✅ (2) 상위: 나(accountNo)를 추천한 회원들 3대까지
-    // 상위 1대: WHERE REFERRER_ACCOUNT_NO = 내 accountNo 인 row의 ACCOUNT_NO 가 추천인
-    // =========================
+
     $upline = [];
     $visited = [];
 
@@ -84,7 +77,7 @@ try {
         if (isset($visited[$current])) break;
         $visited[$current] = true;
 
-        // "current(나)를 추천한 사람" 찾기
+
         $stmt = $pdo->prepare("
             SELECT
                 ACCOUNT_NO AS UP_ACCOUNT_NO
@@ -98,7 +91,7 @@ try {
 
         if ($upAccountNo === '') break;
 
-        // 상위 계정 상세(있으면)
+
         $stmt = $pdo->prepare("
             SELECT
                 REFERRER_ACCOUNT_NO,
@@ -127,7 +120,7 @@ try {
             'createdAt'         => $up['CREATED_AT'] ?? null,
         ];
 
-        $current = $upAccountNo; // 다음 상위로
+        $current = $upAccountNo; 
     }
 
     jsonResponse(RES_SUCCESS, [
