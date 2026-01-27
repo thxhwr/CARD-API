@@ -3,7 +3,7 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
 try {
-    $memberId = $_POST['memberId'] ?? '';
+    $memberId = "ksw9310@nate.com";
     $password = $_POST['memberPw'] ?? '';
 
     if (empty($memberId) || empty($password)) {
@@ -86,6 +86,8 @@ try {
         ");
         $stmt->execute([$accountNo]);
         $referrerAccountNo = $stmt->fetchColumn();
+
+        print_r($memberInfo . " " .  $referrerAccountNo);
 
         insertLoginLog([
             'user_id'      => $memberInfo['data'][0]['userId'],
