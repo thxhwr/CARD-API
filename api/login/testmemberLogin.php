@@ -3,13 +3,7 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
 try {
-    $memberId = "ksw9310@nate.com";
-    $password = "123456";
-
-    if (empty($memberId) || empty($password)) {
-        jsonResponse(RES_API_RESPONSE_ERROR, [], 400);
-    }
-
+    $memberId = "kimjihun0829@naver.com";
     if (!filter_var($memberId, FILTER_VALIDATE_EMAIL)) {
         jsonResponse(RES_INVALID_EMAIL, [], 400);
     }
@@ -67,7 +61,7 @@ try {
         jsonResponse(RES_USER_NOT_FOUND, [], 404);
     }
 
-    if(md5($password) == $memberInfo['data'][0]['password']){
+   
         $stmt = $pdo->prepare("
             SELECT APPLY_ID
             FROM MEMBER_APPLY
@@ -104,18 +98,7 @@ try {
             'referrerAccountNo' => $referrerAccountNo ?: null,
         ]);
 
-    }else{
-        if (!hash_equals($memberInfo['data'][0]['password'], md5($password))) {
-            insertLoginLog([
-                'user_id'      => $memberInfo['data'][0]['userId'],
-                'account_no'   => $memberId,
-                'login_result' => 1,
-                'fail_code'    => RES_PASSWORD_MISMATCH,
-            ]);
-
-            jsonResponse(RES_PASSWORD_MISMATCH, [], 401);
-        }
-    }
+  
 } catch (Throwable $e) {
     jsonResponse(RES_SYSTEM_ERROR, [
         'error' => $e->getMessage()
