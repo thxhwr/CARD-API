@@ -29,17 +29,11 @@ try {
         jsonResponse(RES_USER_NOT_FOUND, [], 404);
     }
 
-    $targetRef = strtolower(trim($target['REFERRER_ACCOUNT_NO'] ?? ''));
-
+   
     $upline = [];
-    $visited = [];
+    $parentAccountNo = strtolower(trim($target['REFERRER_ACCOUNT_NO'] ?? ''));
 
-    $currentRef = $targetRef;
-    for ($lvl = 1; $lvl <= 3; $lvl++) {
-        if ($currentRef === '') break;
-        if (isset($visited[$currentRef])) break;
-        $visited[$currentRef] = true;
-
+    if ($parentAccountNo !== '') {
         $stmt = $pdo->prepare("
             SELECT
                 REFERRER_ACCOUNT_NO,
@@ -55,39 +49,23 @@ try {
             WHERE ACCOUNT_NO = ?
             LIMIT 1
         ");
-        $stmt->execute([$currentRef]);
+        $stmt->execute([$parentAccountNo]);
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$row) {
+    
+        if ($row) {
             $upline[] = [
-                'level' => $lvl,
-                'referrerAccountNo' => null,
-                'accountNo' => $currentRef,
-                'name' => '',
-                'phone' => '',
-                'address' => '',
-                'status' => null,
-                'rejectReason' => null,
-                'createdAt' => null,
-                'updatedAt' => null,
+                'level' => 1,
+                'referrerAccountNo' => $row['REFERRER_ACCOUNT_NO'],
+                'accountNo' => $row['ACCOUNT_NO'],
+                'name' => $row['NAME'],
+                'phone' => $row['PHONE'],
+                'address' => $row['ADDRESS'],
+                'status' => $row['STATUS'],
+                'rejectReason' => $row['REJECT_REASON'],
+                'createdAt' => $row['CREATED_AT'],
+                'updatedAt' => $row['UPDATED_AT'],
             ];
-            break;
         }
-
-        $upline[] = [
-            'level' => $lvl,
-            'referrerAccountNo' => $row['REFERRER_ACCOUNT_NO'],
-            'accountNo' => $row['ACCOUNT_NO'],
-            'name' => $row['NAME'],
-            'phone' => $row['PHONE'],
-            'address' => $row['ADDRESS'],
-            'status' => $row['STATUS'],
-            'rejectReason' => $row['REJECT_REASON'],
-            'createdAt' => $row['CREATED_AT'],
-            'updatedAt' => $row['UPDATED_AT'],
-        ];
-
-        $currentRef = strtolower(trim($row['REFERRER_ACCOUNT_NO'] ?? ''));
     }
 
     $downlineLevels = [
