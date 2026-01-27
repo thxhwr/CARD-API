@@ -84,7 +84,7 @@ try {
             WHERE ACCOUNT_NO = ?
             LIMIT 1
         ");
-        $stmt->execute([$accountNo]);
+        $stmt->execute([$memberInfo['data'][0]['accountNo']]);
         $referrerAccountNo = $stmt->fetchColumn();
 
         insertLoginLog([
