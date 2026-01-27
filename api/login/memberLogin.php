@@ -77,6 +77,16 @@ try {
         $stmt->execute([$memberInfo['data'][0]['accountNo']]);
         $localUserId = $stmt->fetchColumn();
 
+
+        $stmt = $pdo->prepare("
+            SELECT REFERRER_ACCOUNT_NO
+            FROM MEMBER_APPLY
+            WHERE ACCOUNT_NO = ?
+            LIMIT 1
+        ");
+        $stmt->execute([$accountNo]);
+        $referrerAccountNo = $stmt->fetchColumn();
+
         insertLoginLog([
             'user_id'      => $memberInfo['data'][0]['userId'],
             'account_no'   => $memberInfo['data'][0]['accountNo'],
@@ -88,7 +98,8 @@ try {
             'userId' => $memberInfo['data'][0]['userId'],
             'localUserId'  => $localUserId ? (int)$localUserId : null,
             'balance' => $memberInfo['data'][0]['balance'],
-            'status' => $memberInfo['data'][0]['status']
+            'status' => $memberInfo['data'][0]['status'],
+            'referrerAccountNo' => $referrerAccountNo ?: null,
         ]);
     }else{
         if (!hash_equals($memberInfo['data'][0]['password'], md5($password))) {
