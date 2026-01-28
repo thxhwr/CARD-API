@@ -101,7 +101,7 @@ try {
     $payout = json_decode($response, true);
     $status = $payout['status'] ?? '';
     curl_close($curl);
-
+print_r($payout);
     if ($status === 'SUCCESS') {    
         
         $stmt = $pdo->prepare("
