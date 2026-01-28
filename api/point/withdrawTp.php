@@ -44,6 +44,10 @@ try {
     $where[] = "DESCRIPTION LIKE ?";
     $params[] = "%TP%출금%";
 
+    $where[] = "DESCRIPTION NOT LIKE ?";
+    $params[] = "%수수료%";
+
+
     $where[] = "CREATED_AT >= ?";
     $params[] = $start->format('Y-m-d H:i:s');
 
