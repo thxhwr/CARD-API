@@ -4,9 +4,6 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 try {
     $accountNo = strtolower(trim($_POST['accountNo'] ?? ''));
 
-    if($accountNo == "ksw9310@nate.com"){
-        $accountNo = "thx7929@gmail.com";
-    }
 
     if ($accountNo === '') {
         jsonResponse(RES_ACCOUNT_REQUIRED, [], 400);
