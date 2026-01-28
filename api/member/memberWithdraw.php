@@ -158,6 +158,8 @@ print_r($payout);
             'totalDeducted'  => $totalDeductAmount,
             'remainBalance' => $balance - $totalDeductAmount
         ]);
+    }else if($status === 'ERROR_1118'){
+        jsonResponse(RES_API_RESPONSE_ERROR, ['message' => '점검 중 입니다.'], 500);
     }else{
         jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
     }
