@@ -3,13 +3,27 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
 try {
-    $accountNo   = trim($_POST['accountNo'] ?? 'youbr919@naver.com');
-    $accountId   = trim($_POST['accountId'] ?? '2222578');
-    $amount      = (int)($_POST['amount'] ?? 1);
+    $accountNo   = trim($_POST['accountNo'] ?? '');
+    $accountId   = trim($_POST['accountId'] ?? '');
+    $amount      = (int)($_POST['amount'] ?? 0);
     $description = trim($_POST['description'] ?? 'TP 출금');
+
+    $MIN_WITHDRAW_AMOUNT = 10;
+    $FEE_AMOUNT = 1;
+    $totalDeductAmount = $amount + $FEE_AMOUNT;
 
     if ($accountNo === '' || $accountId === '' || $amount <= 0) {
         jsonResponse(RES_INVALID_PARAM, [], 400);
+    }
+
+    if (
+        $accountNo === '' ||
+        $accountId === '' ||
+        $amount < $MIN_WITHDRAW_AMOUNT
+    ) {
+        jsonResponse(RES_INVALID_PARAM, [
+            'message' => '최소 출금 금액은 10입니다.'
+        ], 400);
     }
 
     $pdo->beginTransaction();
@@ -42,9 +56,12 @@ try {
     $stmt->execute([$userId]);
     $balance = (int)$stmt->fetchColumn();
 
-    if ($balance < $amount) {
+    if ($balance < $totalDeductAmount) {
         $pdo->rollBack();
-        jsonResponse(RES_POINT_LACK, [], 400);
+        jsonResponse(RES_POINT_LACK, [
+            'required' => $totalDeductAmount,
+            'balance'  => $balance
+        ], 400);
     }
 
     $orderNo = date('YmdHis') . '-' . random_int(1000, 9999);
@@ -84,36 +101,62 @@ try {
     $payout = json_decode($response, true);
     $status = $payout['status'] ?? '';
     curl_close($curl);
-print_r($payout);
+
     if ($status === 'SUCCESS') {    
+        
         $stmt = $pdo->prepare("
-            INSERT INTO POINT_LOG (
-                USER_ID,
-                TYPE_CODE,
-                ACTION_TYPE,
-                AMOUNT,
-                DESCRIPTION,
-                CREATED_AT
-            ) VALUES (
-                :user_id,
-                'TP',
-                'OUT',
-                :amount,
-                :description,
-                NOW()
-            )
+        INSERT INTO POINT_LOG (
+            USER_ID,
+            TYPE_CODE,
+            ACTION_TYPE,
+            AMOUNT,
+            DESCRIPTION,
+            CREATED_AT
+        ) VALUES (
+            :user_id,
+            'TP',
+            'OUT',
+            :amount,
+            :description,
+            NOW()
+        )
         ");
         $stmt->execute([
-            ':user_id'     => $userId,
-            ':amount'      => $amount,
-            ':description' => $description
+        ':user_id'     => $userId,
+        ':amount'      => $amount,
+        ':description' => 'TP 출금'
+        ]);
+
+        $stmt = $pdo->prepare("
+        INSERT INTO POINT_LOG (
+            USER_ID,
+            TYPE_CODE,
+            ACTION_TYPE,
+            AMOUNT,
+            DESCRIPTION,
+            CREATED_AT
+        ) VALUES (
+            :user_id,
+            'TP',
+            'OUT',
+            :amount,
+            :description,
+            NOW()
+        )
+        ");
+        $stmt->execute([
+        ':user_id'     => $userId,
+        ':amount'      => $FEE_AMOUNT,
+        ':description' => 'TP 출금 수수료'
         ]);
 
         $pdo->commit();
 
         jsonResponse(RES_SUCCESS, [
             'withdrawAmount' => $amount,
-            'remainBalance'  => $balance - $amount
+            'feeAmount'      => $FEE_AMOUNT,
+            'totalDeducted'  => $totalDeductAmount,
+            'remainBalance' => $balance - $totalDeductAmount
         ]);
     }else{
         jsonResponse(RES_API_RESPONSE_ERROR, [], 500);
