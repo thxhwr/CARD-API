@@ -3,14 +3,16 @@ if (!defined('BASE_PATH')) {
     require_once __DIR__ . '/bootstrap.php'; // 예비용
 }
 // require_once BASE_PATH . '/config/lib.php';
-
 $stmt = $pdo->query("
-SELECT CONVERT_TZ(
-    FROM_UNIXTIME(AT_EXPIRES_IN / 1000),'+00:00','+09:00') AS expires_at, 
-    CONVERT_TZ(
-    FROM_UNIXTIME(AT_TIME_STAMP / 1000),'+00:00','+09:00') AS timestamp_at, 
-    AT_ACCESS_TOKEN 
-FROM API_ACCESS_TOKEN WHERE AT_STATUS = 'SUCCESS' ORDER BY AT_TIME_STAMP DESC LIMIT 1;");
+SELECT 
+    FROM_UNIXTIME(AT_EXPIRES_IN / 1000) AS expires_at,
+    FROM_UNIXTIME(AT_TIME_STAMP / 1000) AS timestamp_at,
+    AT_ACCESS_TOKEN
+FROM API_ACCESS_TOKEN
+WHERE AT_STATUS = 'SUCCESS'
+ORDER BY AT_TIME_STAMP DESC
+LIMIT 1;
+");
 $token = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $now = new DateTime('now');
@@ -86,12 +88,15 @@ if ($needRefresh) {
     ]);
 
     $stmt = $pdo->query("
-    SELECT CONVERT_TZ(
-        FROM_UNIXTIME(AT_EXPIRES_IN / 1000),'+00:00','+09:00') AS expires_at, 
-        CONVERT_TZ(
-        FROM_UNIXTIME(AT_TIME_STAMP / 1000),'+00:00','+09:00') AS timestamp_at, 
-        AT_ACCESS_TOKEN 
-    FROM API_ACCESS_TOKEN WHERE AT_STATUS = 'SUCCESS' ORDER BY AT_TIME_STAMP DESC LIMIT 1;");
+    SELECT 
+        FROM_UNIXTIME(AT_EXPIRES_IN / 1000) AS expires_at,
+        FROM_UNIXTIME(AT_TIME_STAMP / 1000) AS timestamp_at,
+        AT_ACCESS_TOKEN
+    FROM API_ACCESS_TOKEN
+    WHERE AT_STATUS = 'SUCCESS'
+    ORDER BY AT_TIME_STAMP DESC
+    LIMIT 1;
+    ");
     $token = $stmt->fetch(PDO::FETCH_ASSOC);
 }
 ?>
