@@ -3,7 +3,13 @@ require_once __DIR__ . '/../../config/bootstrap.php';
 require_once BASE_PATH . '/config/accessToken.php';
 
 try {
-    $memberId = "kimjihun0829@naver.com";
+    $memberId = $_POST['memberId'] ?? 'kni1992@naver.com';
+    $password = $_POST['memberPw'] ?? '1234';
+
+    if (empty($memberId) || empty($password)) {
+        jsonResponse(RES_API_RESPONSE_ERROR, [], 400);
+    }
+
     if (!filter_var($memberId, FILTER_VALIDATE_EMAIL)) {
         jsonResponse(RES_INVALID_EMAIL, [], 400);
     }
@@ -40,7 +46,7 @@ try {
     $response = curl_exec($curl);
     $memberInfo = json_decode($response, true);
     curl_close($curl);
-
+    
     if (($memberInfo['status'] ?? '') !== 'SUCCESS') {
         insertLoginLog([
             'account_no'   => $memberId,
@@ -61,7 +67,7 @@ try {
         jsonResponse(RES_USER_NOT_FOUND, [], 404);
     }
 
-   
+    if(md5($password) == $memberInfo['data'][0]['password']){
         $stmt = $pdo->prepare("
             SELECT APPLY_ID
             FROM MEMBER_APPLY
@@ -71,17 +77,6 @@ try {
         $stmt->execute([$memberInfo['data'][0]['accountNo']]);
         $localUserId = $stmt->fetchColumn();
 
-
-        $stmt = $pdo->prepare("
-            SELECT REFERRER_ACCOUNT_NO
-            FROM MEMBER_APPLY
-            WHERE ACCOUNT_NO = ?
-            LIMIT 1
-        ");
-        $stmt->execute([$memberInfo['data'][0]['accountNo']]);
-        $referrerAccountNo = $stmt->fetchColumn();
-
-        print_r($memberInfo . " " .  $referrerAccountNo);
 
         insertLoginLog([
             'user_id'      => $memberInfo['data'][0]['userId'],
@@ -95,10 +90,20 @@ try {
             'localUserId'  => $localUserId ? (int)$localUserId : null,
             'balance' => $memberInfo['data'][0]['balance'],
             'status' => $memberInfo['data'][0]['status'],
-            'referrerAccountNo' => $referrerAccountNo ?: null,
         ]);
 
-  
+    }else{
+        if (!hash_equals($memberInfo['data'][0]['password'], md5($password))) {
+            insertLoginLog([
+                'user_id'      => $memberInfo['data'][0]['userId'],
+                'account_no'   => $memberId,
+                'login_result' => 1,
+                'fail_code'    => RES_PASSWORD_MISMATCH,
+            ]);
+
+            jsonResponse(RES_PASSWORD_MISMATCH, [], 401);
+        }
+    }
 } catch (Throwable $e) {
     jsonResponse(RES_SYSTEM_ERROR, [
         'error' => $e->getMessage()
