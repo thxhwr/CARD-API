@@ -34,7 +34,7 @@ try {
             M.PHONE,
             M.STATUS,
             M.CREATED_AT
-        FROM MEMBER M
+        FROM MEMBER_APPLY M
         {$whereSql}
         ORDER BY M.CREATED_AT DESC
         LIMIT {$limit} OFFSET {$offset}
