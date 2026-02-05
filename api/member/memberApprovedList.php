@@ -35,7 +35,7 @@ try {
             A.NAME,
             A.PHONE,
             A.ADDRESS,
-            A.REFERRER,
+            A.REFERRER_ACCOUNT_NO,
             A.STATUS,
             A.CREATED_AT
         FROM MEMBER_APPLY A
